@@ -15,7 +15,7 @@ const StyledForm = styled(Form)`
   padding: 70px;
   background-color: ${colors.backgroundSecondary};
   width: 45vw;
-  border-color: ${(props) => (props.err ? colors.error : colors.secondaryBackground)};
+  border-color: ${(props: StyledFormProps) => (props.err ? colors.error : colors.secondaryBackground)};
 `
 const StyledTitle = styled(Title)`
   text-align: "left";
@@ -35,6 +35,9 @@ const layout = {
 const StyledTextWrapper = styled.div`
   padding: 20px;
 `
+type StyledFormProps = {
+  err: string | boolean
+}
 
 const Register = observer(() => {
   const [form] = Form.useForm()

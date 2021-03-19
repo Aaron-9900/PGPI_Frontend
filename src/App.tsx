@@ -22,9 +22,6 @@ const App = observer(function App() {
       <div className="App">
         <Router>
           <Switch>
-            <Route exact path="/">
-              <Home></Home>
-            </Route>
             <Route path="/login">
               <Login></Login>
             </Route>

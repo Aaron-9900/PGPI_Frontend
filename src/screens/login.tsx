@@ -16,7 +16,7 @@ const StyledForm = styled(Form)`
   padding: 50px;
   background-color: ${colors.backgroundSecondary};
   border-width: "1px";
-  border-color: ${(props) => (props.err ? colors.error : colors.secondaryBackground)};
+  border-color: ${(props: StyledFormProps) => (props.err ? colors.error : colors.secondaryBackground)};
 `
 const StyledTitle = styled(Title)`
   text-align: "left";
@@ -39,12 +39,19 @@ const tailLayout = {
 const StyledTextWrapper = styled.div`
   padding: 20px;
 `
+type FormValue = {
+  email: string
+  password: string
+}
+type StyledFormProps = {
+  err: string | boolean
+}
 
 const Login = observer(function Login(): ReactElement {
   const { authStore } = useStores()
   const [err, setErr] = useState<string | false>(false)
   const [isLogged, setLogged] = useState<boolean>(false)
-  const onFinish = async (value) => {
+  const onFinish = async (value: FormValue) => {
     try {
       await authStore.login(value.email, value.password)
       setLogged(true)
@@ -61,7 +68,7 @@ const Login = observer(function Login(): ReactElement {
       <StyledForm
         {...layout}
         name="basic"
-        onFinish={onFinish}
+        onFinish={(value: unknown) => onFinish(value as FormValue)}
         err={err}
         onFieldsChange={() => setErr(false)}
       >
