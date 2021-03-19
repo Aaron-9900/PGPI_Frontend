@@ -5,7 +5,6 @@ import { RootStoreProvider } from "./models/root-store/root-store-context"
 import { setupRootStore } from "./models/root-store/setup-root-store"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Spin } from "antd"
-import Home from "./screens/home"
 import Login from "./screens/login"
 import Register from "./screens/register"
 
