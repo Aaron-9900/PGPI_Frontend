@@ -15,7 +15,8 @@ const StyledForm = styled(Form)`
   padding: 70px;
   background-color: ${colors.backgroundSecondary};
   width: 45vw;
-  border-color: ${(props: StyledFormProps) => (props.err ? colors.error : colors.secondaryBackground)};
+  border-color: ${(props: StyledFormProps) =>
+    props.err ? colors.error : colors.secondaryBackground};
 `
 const StyledTitle = styled(Title)`
   text-align: "left";
@@ -135,4 +136,4 @@ const Register = observer(() => {
   )
 })
 
-export default Register
+export { Register }

@@ -16,7 +16,8 @@ const StyledForm = styled(Form)`
   padding: 50px;
   background-color: ${colors.backgroundSecondary};
   border-width: "1px";
-  border-color: ${(props: StyledFormProps) => (props.err ? colors.error : colors.secondaryBackground)};
+  border-color: ${(props: StyledFormProps) =>
+    props.err ? colors.error : colors.secondaryBackground};
 `
 const StyledTitle = styled(Title)`
   text-align: "left";
@@ -82,7 +83,13 @@ const Login = observer(function Login(): ReactElement {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
+          rules={[
+            { required: true, message: "Please input your email!" },
+            {
+              type: "email",
+              message: "Please provide a valid email!",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -105,4 +112,4 @@ const Login = observer(function Login(): ReactElement {
   )
 })
 
-export default Login
+export { Login }

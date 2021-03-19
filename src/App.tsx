@@ -5,8 +5,7 @@ import { RootStoreProvider } from "./models/root-store/root-store-context"
 import { setupRootStore } from "./models/root-store/setup-root-store"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Spin } from "antd"
-import Login from "./screens/login"
-import Register from "./screens/register"
+import { Home, Register, Login } from "./screens"
 
 const App = observer(function App() {
   const [rootStore, setRootStore] = useState<RootStore | null>(null)
@@ -24,6 +23,9 @@ const App = observer(function App() {
           <Switch>
             <Route path="/login">
               <Login></Login>
+            </Route>
+            <Route exact path="/">
+              <Home></Home>
             </Route>
             <Route path="/register">
               <Register></Register>
