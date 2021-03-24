@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Form, Input, InputNumber, Button, Select, Typography, Spin } from "antd"
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
@@ -16,6 +17,9 @@ const StyledSelect = styled(Select)`
 const StyledSelectOption = styled(Option)`
   width: 30% !important;
 `
+const StyledInput = styled(Input)`
+  width: 30% !important;
+`
 const StyledSpinner = styled(Spin)`
   height: "100%";
   width: "100%";
@@ -26,15 +30,30 @@ const tailLayout = {
 export const AddRequestForm = observer(function (): JSX.Element {
   const { productsStore } = useStores()
   const [err, setErr] = useState<string | null>()
+  const [newProduct, setNewProduct] = useState<boolean>()
 
   return (
     <Form
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onFinish={async (value: { name: string; quantity: number }) => {
+      onFinish={async (value: {
+        name: string
+        quantity: number
+        provider?: string
+        newName?: string
+      }) => {
         try {
-          await productsStore.postProduct(value)
+          if (newProduct) {
+            const params = {
+              name: value.newName!,
+              quantity: value.quantity,
+              provider: value.provider,
+            }
+            await productsStore.postProduct(params, true)
+          } else {
+            await productsStore.postProduct(value)
+          }
         } catch (err) {
           setErr(parseError(err))
         }
@@ -46,14 +65,43 @@ export const AddRequestForm = observer(function (): JSX.Element {
         label="Nombre del producto"
         rules={[{ required: true, message: "Selecciona un producto" }]}
       >
-        <StyledSelect>
+        <StyledSelect
+          onChange={(value: any) => {
+            console.log(value)
+            setNewProduct(value === "new")
+          }}
+        >
           {productsStore.products.map((product) => (
             <StyledSelectOption key={product.id} value={product.name}>
               {product.name}
             </StyledSelectOption>
           ))}
+          <StyledSelectOption value={"new"}>Otro</StyledSelectOption>
         </StyledSelect>
       </Form.Item>
+      {newProduct && (
+        <>
+          <Form.Item
+            name="newName"
+            label="Nombre del nuevo producto"
+            rules={[
+              {
+                required: true,
+                message: "Es necesario que agregues un nombre para el nuevo producto",
+              },
+            ]}
+          >
+            <StyledInput></StyledInput>
+          </Form.Item>
+          <Form.Item
+            name="provider"
+            label="Proveedor"
+            rules={[{ required: true, message: "Es necesario que agregues un proveedor" }]}
+          >
+            <StyledInput></StyledInput>
+          </Form.Item>
+        </>
+      )}
       <Form.Item
         name="quantity"
         label="Cantidad"

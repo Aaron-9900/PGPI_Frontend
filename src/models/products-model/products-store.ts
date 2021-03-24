@@ -34,13 +34,16 @@ export const ProductsModelStore = types
           throw err
         }
       }),
-      postProduct: flow(function* (product: ProductParams) {
+      postProduct: flow(function* (product: ProductParams, isNew?: boolean) {
         self.setStatus("pending")
         try {
           const response: PostProduct = yield self.environment.api.addProducts(product)
           self.setStatus("done")
           if (response.kind !== "ok") {
             throw response
+          }
+          if (isNew) {
+            self.products.push(response.product)
           }
         } catch (err) {
           self.setStatus("error")
