@@ -4,13 +4,16 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { useStores } from "../../models/root-store/root-store-context"
 import { parseError } from "../../services/error-parser"
-const { Text, Link: AntdLink } = Typography
+const { Text } = Typography
 
 const { Option } = Select
 const StyledInputNumber = styled(InputNumber)`
   width: 30%;
 `
-const StyledSelect = styled(Input)`
+const StyledSelect = styled(Select)`
+  width: 30% !important;
+`
+const StyledSelectOption = styled(Option)`
   width: 30% !important;
 `
 const StyledSpinner = styled(Spin)`
@@ -43,7 +46,13 @@ export const AddRequestForm = observer(function (): JSX.Element {
         label="Nombre del producto"
         rules={[{ required: true, message: "Selecciona un producto" }]}
       >
-        <StyledSelect></StyledSelect>
+        <StyledSelect>
+          {productsStore.products.map((product) => (
+            <StyledSelectOption key={product.id} value={product.name}>
+              {product.name}
+            </StyledSelectOption>
+          ))}
+        </StyledSelect>
       </Form.Item>
       <Form.Item
         name="quantity"

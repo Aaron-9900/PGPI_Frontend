@@ -16,3 +16,7 @@ export function parseProduct(backendProduct: BackendProduct): ProductsModel {
     provider: backendProduct.proveedor,
   }
 }
+
+export function parseProducts(backendProducts: BackendProduct[]): ProductsModel[] {
+  return backendProducts.map((product) => parseProduct(product))
+}

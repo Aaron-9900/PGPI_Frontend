@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { observable, IObservableValue } from "mobx"
 
 export type StatusType = "idle" | "pending" | "done" | "error"

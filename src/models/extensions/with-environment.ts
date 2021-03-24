@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { getEnv, IStateTreeNode } from "mobx-state-tree"
 import { Environment } from "../environment"
 

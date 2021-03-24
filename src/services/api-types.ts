@@ -13,3 +13,4 @@ export type GetUsersResult =
     }
   | GeneralApiProblem
 export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem
+export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiProblem

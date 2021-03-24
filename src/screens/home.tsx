@@ -2,11 +2,12 @@ import { Collapse, Divider, Layout, Menu } from "antd"
 import { Content, Footer, Header } from "antd/lib/layout/layout"
 import { CollapseItem } from "../components/collapse/collapse"
 import { AddRequestForm } from "./home/add-request-form"
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 import { color } from "../utils/colors"
 import { colors } from "../colors/colors"
 import { observer } from "mobx-react-lite"
+import { useStores } from "../models/root-store/root-store-context"
 const { Panel } = Collapse
 
 const StyledContent = styled(Content)`
@@ -14,6 +15,10 @@ const StyledContent = styled(Content)`
 `
 
 export const Home = observer(function (): JSX.Element {
+  const { productsStore } = useStores()
+  useEffect(() => {
+    productsStore.getProducts()
+  }, [])
   return (
     <Layout>
       <Header>
