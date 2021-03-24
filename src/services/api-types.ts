@@ -1,4 +1,4 @@
-import { ProposalsModelStore } from "../models/proposals-model/proposals-model-store"
+import { ProductsModel } from "../models/products-model/products-model"
 import { GeneralApiProblem } from "./api-problem"
 
 export type GetUsersResult =
@@ -12,5 +12,4 @@ export type GetUsersResult =
       }
     }
   | GeneralApiProblem
-export type PostRegister = { kind: "ok"; username: string } | GeneralApiProblem
-export type GetProposals = { kind: "ok"; proposals: ProposalsModelStore } | GeneralApiProblem
+export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem

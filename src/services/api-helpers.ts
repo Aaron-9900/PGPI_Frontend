@@ -1,31 +1,18 @@
-import { ProposalsModelStore } from "../models/proposals-model/proposals-model-store"
-import { UserModel } from "../models/user-model/user-model"
+import { ProductsModel } from "../models/products-model/products-model"
 
-export function parseUser(backendUser: any): UserModel {
-  return {
-    name: backendUser.name,
-    id: backendUser.id,
-  }
+export type BackendProduct = {
+  id: number
+  cantidad: number
+  nombre: string
+  cantidad_minima_restock: number
+  proveedor: string
 }
-
-export function parseProposals(proposalsList): ProposalsModelStore {
-  return proposalsList.map((prop) => {
-    return {
-      id: prop.id,
-      user: parseUser(prop.user),
-      limit: prop.limit,
-      name: prop.name,
-      description: prop.description,
-    }
-  })
-}
-
-export function parseAuth(auth) {
-  console.log(auth)
+export function parseProduct(backendProduct: BackendProduct): ProductsModel {
   return {
-    accessToken: auth.access_token,
-    refreshToken: auth.refresh_token,
-    username: auth.user.name,
-    id: auth.user.id,
+    id: backendProduct.id,
+    quantity: backendProduct.cantidad,
+    minRestock: backendProduct.cantidad_minima_restock,
+    name: backendProduct.nombre,
+    provider: backendProduct.proveedor,
   }
 }

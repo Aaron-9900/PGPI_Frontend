@@ -6,13 +6,14 @@ import React from "react"
 import styled from "styled-components"
 import { color } from "../utils/colors"
 import { colors } from "../colors/colors"
+import { observer } from "mobx-react-lite"
 const { Panel } = Collapse
 
 const StyledContent = styled(Content)`
   background-color: ${colors.backgroundPrimary};
 `
 
-export const Home = (): JSX.Element => {
+export const Home = observer(function (): JSX.Element {
   return (
     <Layout>
       <Header>
@@ -40,4 +41,4 @@ export const Home = (): JSX.Element => {
       <Footer style={{ textAlign: "center" }}>UGIVA Servicios SA®</Footer>
     </Layout>
   )
-}
+})
