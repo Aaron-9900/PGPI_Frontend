@@ -1,11 +1,12 @@
 import { observer } from "mobx-react-lite"
-import React, { useState, useEffect, Suspense } from "react"
+import React, { useState, useEffect } from "react"
 import { RootStore } from "./models/root-store/root-store"
 import { RootStoreProvider } from "./models/root-store/root-store-context"
 import { setupRootStore } from "./models/root-store/setup-root-store"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Spin } from "antd"
 import { Home, Register, Login } from "./screens"
+import { ProductDetal } from "./screens/product-detail-screen"
 
 const App = observer(function App() {
   const [rootStore, setRootStore] = useState<RootStore | null>(null)
@@ -29,6 +30,9 @@ const App = observer(function App() {
             </Route>
             <Route path="/register">
               <Register></Register>
+            </Route>
+            <Route path="/product/:productId">
+              <ProductDetal />
             </Route>
           </Switch>
         </Router>

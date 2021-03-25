@@ -29,11 +29,13 @@ const tailLayout = {
 }
 export const AddRequestForm = observer(function (): JSX.Element {
   const { productsStore } = useStores()
+  const [form] = Form.useForm()
   const [err, setErr] = useState<string | null>()
   const [newProduct, setNewProduct] = useState<boolean>()
 
   return (
     <Form
+      form={form}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
@@ -42,6 +44,7 @@ export const AddRequestForm = observer(function (): JSX.Element {
         quantity: number
         provider?: string
         newName?: string
+        restockAmmount?: number
       }) => {
         try {
           if (newProduct) {
@@ -49,8 +52,11 @@ export const AddRequestForm = observer(function (): JSX.Element {
               name: value.newName!,
               quantity: value.quantity,
               provider: value.provider,
+              restockAmmount: value.restockAmmount!,
             }
             await productsStore.postProduct(params, true)
+            setNewProduct(false)
+            form.resetFields()
           } else {
             await productsStore.postProduct(value)
           }
@@ -99,6 +105,15 @@ export const AddRequestForm = observer(function (): JSX.Element {
             rules={[{ required: true, message: "Es necesario que agregues un proveedor" }]}
           >
             <StyledInput></StyledInput>
+          </Form.Item>
+          <Form.Item
+            name="restockAmmount"
+            label="Cantidad para reestock"
+            rules={[
+              { required: true, message: "Es necesario que agregues una cantidad de reestock" },
+            ]}
+          >
+            <StyledInputNumber />
           </Form.Item>
         </>
       )}

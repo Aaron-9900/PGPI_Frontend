@@ -8,6 +8,7 @@ import { color } from "../utils/colors"
 import { colors } from "../colors/colors"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../models/root-store/root-store-context"
+import { ProductsList } from "./home/products-list"
 const { Panel } = Collapse
 
 const StyledContent = styled(Content)`
@@ -31,11 +32,11 @@ export const Home = observer(function (): JSX.Element {
       </Header>
       <StyledContent>
         <CollapseItem>
-          <Panel header="Agregar nuevo pedido" key="1">
+          <Panel header="Agregar productos" key="1">
             <AddRequestForm />
           </Panel>
-          <Panel header="This is panel header 2" key="2">
-            <p>text</p>
+          <Panel header="Ver productos" key="2">
+            <ProductsList />
           </Panel>
           <Panel header="This is panel header 3" key="3">
             <p>text</p>
