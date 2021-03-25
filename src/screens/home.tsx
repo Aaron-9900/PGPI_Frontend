@@ -42,7 +42,6 @@ export const Home = observer(function (): JSX.Element {
             <p>text</p>
           </Panel>
         </CollapseItem>
-        <Divider plain>Stock</Divider>
       </StyledContent>
       <Footer style={{ textAlign: "center" }}>UGIVA Servicios SA®</Footer>
     </Layout>

@@ -33,11 +33,20 @@ export const ProductDetal = observer(function (props) {
     })()
   }, [])
   return (
-    <div>
+    <div style={{ padding: "50px" }}>
       {product.status !== "done" ? (
         <StyledSpinner size="large" />
       ) : (
         <List
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 4,
+            lg: 4,
+            xl: 6,
+            xxl: 3,
+          }}
           itemLayout="vertical"
           size="large"
           dataSource={product.instances}

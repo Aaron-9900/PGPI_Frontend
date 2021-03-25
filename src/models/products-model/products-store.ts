@@ -23,7 +23,7 @@ export const ProductsModelStore = types
         self.setStatus("pending")
         try {
           const response: GetProducts = yield self.environment.api.getProducts()
-          self.setStatus("done")
+          self.setStatus("idle")
           if (response.kind === "ok") {
             const product = response.product
             applySnapshot(self.products, product as any)

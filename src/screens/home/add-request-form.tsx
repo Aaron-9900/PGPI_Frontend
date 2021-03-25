@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Form, Input, InputNumber, Button, Select, Typography, Spin } from "antd"
 import { observer } from "mobx-react-lite"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useStores } from "../../models/root-store/root-store-context"
 import { parseError } from "../../services/error-parser"
@@ -32,7 +32,6 @@ export const AddRequestForm = observer(function (): JSX.Element {
   const [form] = Form.useForm()
   const [err, setErr] = useState<string | null>()
   const [newProduct, setNewProduct] = useState<boolean>()
-
   return (
     <Form
       form={form}
