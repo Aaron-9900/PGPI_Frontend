@@ -8,7 +8,7 @@ export type ProductParams = {
   name: string
   quantity: number
   provider?: string
-  reestock?: number
+  restockAmmount?: number
 }
 export const ProductsModelStore = types
   .model("ProductsModelStore")

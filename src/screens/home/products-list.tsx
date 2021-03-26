@@ -33,8 +33,12 @@ export const ProductsList = observer(function (props) {
           key={item.id}
           actions={[
             <IconText icon="Total: " text={item.quantity?.toString()} key="list-vertical-star-o" />,
-            <IconText icon="Stock: " text="156" key="list-vertical-like-o" />,
-            <IconText icon="Preparación: " text="2" key="list-vertical-message" />,
+            <IconText icon="Stock: " text={item.stock?.toString()} key="list-vertical-like-o" />,
+            <IconText
+              icon="Preparación: "
+              text={item.preparation?.toString()}
+              key="list-vertical-message"
+            />,
           ]}
         >
           <List.Item.Meta title={<Link to={`/product/${item.id}`}>{item.name}</Link>} />

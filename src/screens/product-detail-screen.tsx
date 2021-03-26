@@ -60,7 +60,6 @@ export const ProductDetal = observer(function (props) {
                   text={item.col?.toString()}
                   key="list-vertical-like-o"
                 />,
-                <IconText icon="Preparación: " text="2" key="list-vertical-message" />,
               ]}
             >
               <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />

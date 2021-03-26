@@ -8,6 +8,8 @@ export type BackendProduct = {
   nombre: string
   cantidad_minima_restock: number
   proveedor: string
+  stock: number
+  preparacion: number
 }
 export type BackendProductInstance = {
   id: number
@@ -22,6 +24,8 @@ export function parseProduct(backendProduct: BackendProduct): ProductsModel {
     minRestock: backendProduct.cantidad_minima_restock,
     name: backendProduct.nombre,
     provider: backendProduct.proveedor,
+    stock: backendProduct.stock,
+    preparation: backendProduct.preparacion,
   })
 }
 

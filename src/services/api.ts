@@ -48,7 +48,7 @@ export class Api {
       nombre: product.name,
       cantidad: product.quantity,
       proveedor: product.provider,
-      cantidad_minima_restock: product.reestock,
+      cantidad_minima_restock: product.restockAmmount,
     })
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)

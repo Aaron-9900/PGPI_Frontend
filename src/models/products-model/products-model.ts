@@ -11,6 +11,8 @@ export const ProductsModel = types
     quantity: 0,
     minRestock: 0,
     provider: "",
+    stock: 0,
+    preparation: 0,
     instances: types.array(ProductInstance),
   })
   .extend(withEnvironment)
