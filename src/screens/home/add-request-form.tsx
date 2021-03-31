@@ -40,12 +40,13 @@ export const AddRequestForm = observer(function (): JSX.Element {
       layout="horizontal"
       onFinish={async (value: {
         name: string
-        quantity: number
+        quantity: any
         provider?: string
         newName?: string
         restockAmmount?: number
       }) => {
         try {
+          value.quantity = 20
           if (newProduct) {
             const params = {
               name: value.newName!,
@@ -53,7 +54,7 @@ export const AddRequestForm = observer(function (): JSX.Element {
               provider: value.provider,
               restockAmmount: value.restockAmmount!,
             }
-            await productsStore.postProduct(params, true)
+            await productsStore.postProduct(params)
             setNewProduct(false)
             form.resetFields()
           } else {
@@ -71,12 +72,15 @@ export const AddRequestForm = observer(function (): JSX.Element {
         rules={[{ required: true, message: "Selecciona un producto" }]}
       >
         <StyledSelect
+          showSearch
+          filterOption={(input, option) =>
+            option?.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 || option?.value === "new"
+          }
           onChange={(value: any) => {
-            console.log(value)
             setNewProduct(value === "new")
           }}
         >
-          {productsStore.products.map((product) => (
+          {productsStore.productsList.map((product) => (
             <StyledSelectOption key={product.id} value={product.name}>
               {product.name}
             </StyledSelectOption>
@@ -116,13 +120,6 @@ export const AddRequestForm = observer(function (): JSX.Element {
           </Form.Item>
         </>
       )}
-      <Form.Item
-        name="quantity"
-        label="Cantidad"
-        rules={[{ required: true, message: "Introduce una cantidad" }]}
-      >
-        <StyledInputNumber />
-      </Form.Item>
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
           {productsStore.status === "pending" ? <StyledSpinner /> : "Añadir"}

@@ -10,31 +10,38 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../models/root-store/root-store-context"
 import { ProductsList } from "./home/products-list"
 import { useHistory } from "react-router-dom"
-import Title from "antd/lib/typography/Title"
 import { TopMenu } from "../components/menu/menu"
+import { AddPedido } from "./pedidos/add-pedido"
+import { PedidosList } from "./pedidos/pedidos-list"
 const { Panel } = Collapse
 
 const StyledContent = styled(Content)`
   background-color: ${colors.backgroundPrimary};
-  padding: 5vh 5vw 5vh 5vw;
 `
 
-export const Home = observer(function (): JSX.Element {
-  const { productsStore } = useStores()
+export const Pedidos = observer(function (): JSX.Element {
+  const { ordersStore } = useStores()
   const history = useHistory()
   useEffect(() => {
-    productsStore.getProducts()
-  }, [productsStore])
+    ordersStore.getOrders()
+  }, [ordersStore])
   return (
     <Layout>
       <Header>
-        <TopMenu currentIndex="1" />
+        <TopMenu currentIndex="2" />
       </Header>
       <StyledContent>
-        <Title>Agregar productos al stock</Title>
-        <AddRequestForm />
-        <Title>Productos</Title>
-        <ProductsList />
+        <CollapseItem>
+          <Panel header="Realizar pedido" key="1">
+            <AddPedido />
+          </Panel>
+          <Panel header="Ver pedidos" key="2">
+            <PedidosList />
+          </Panel>
+          <Panel header="This is panel header 3" key="3">
+            <p>text</p>
+          </Panel>
+        </CollapseItem>
       </StyledContent>
       <Footer style={{ textAlign: "center" }}>LOGIVA Servicios SA®</Footer>
     </Layout>

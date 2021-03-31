@@ -1,3 +1,4 @@
+import { OrdersModel } from "../models/orders/orders-model"
 import { ProductInstance } from "../models/products-model/product-instance"
 import { ProductsModel } from "../models/products-model/products-model"
 import { GeneralApiProblem } from "./api-problem"
@@ -16,3 +17,5 @@ export type GetUsersResult =
 export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem
 export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiProblem
 export type GetProductInstances = { kind: "ok"; instances: ProductInstance[] } | GeneralApiProblem
+export type PostOrder = { kind: "ok"; order: OrdersModel } | GeneralApiProblem
+export type GetOrders = { kind: "ok"; orders: OrdersModel[] } | GeneralApiProblem

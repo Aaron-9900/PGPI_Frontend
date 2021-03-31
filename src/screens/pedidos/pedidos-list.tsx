@@ -3,17 +3,10 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../models/root-store/root-store-context"
 import { List, Avatar, Space } from "antd"
 import { Link, useHistory } from "react-router-dom"
-import { ProductItem } from "../../components/product-item/product-item"
+import { PedidoListItem } from "../../components/pedido-list-item/pedido-list-item"
 
-const IconText = ({ icon, text }: { icon: string; text?: string }) => (
-  <Space>
-    {icon}
-    {text}
-  </Space>
-)
-
-export const ProductsList = observer(function (props) {
-  const { productsStore } = useStores()
+export const PedidosList = observer(function (props) {
+  const { ordersStore } = useStores()
   console.log("render")
   return (
     <List
@@ -23,8 +16,8 @@ export const ProductsList = observer(function (props) {
         pageSize: 6,
         style: { display: "flex" },
       }}
-      dataSource={productsStore.productsList}
-      renderItem={(item) => <ProductItem item={item} />}
+      dataSource={ordersStore.ordersList}
+      renderItem={(item) => <PedidoListItem item={item} />}
     />
   )
 })

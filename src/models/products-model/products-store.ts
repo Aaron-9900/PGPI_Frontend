@@ -13,10 +13,17 @@ export type ProductParams = {
 export const ProductsModelStore = types
   .model("ProductsModelStore")
   .props({
-    products: types.array(ProductsModel),
+    products: types.map(ProductsModel),
   })
   .extend(withEnvironment)
   .extend(withStatus)
+  .views((self) => {
+    return {
+      get productsList() {
+        return Array.from(self.products.values())
+      },
+    }
+  })
   .actions((self) => {
     return {
       getProducts: flow(function* () {
@@ -25,8 +32,8 @@ export const ProductsModelStore = types
           const response: GetProducts = yield self.environment.api.getProducts()
           self.setStatus("idle")
           if (response.kind === "ok") {
-            const product = response.product
-            applySnapshot(self.products, product as any)
+            const products = response.product
+            products.forEach((product) => self.products.put(product))
           } else {
             throw response
           }
@@ -35,7 +42,7 @@ export const ProductsModelStore = types
           throw err
         }
       }),
-      postProduct: flow(function* (product: ProductParams, isNew?: boolean) {
+      postProduct: flow(function* (product: ProductParams) {
         self.setStatus("pending")
         try {
           const response: PostProduct = yield self.environment.api.addProducts(product)
@@ -43,9 +50,7 @@ export const ProductsModelStore = types
           if (response.kind !== "ok") {
             throw response
           }
-          if (isNew) {
-            self.products.push(response.product)
-          }
+          self.products.put(response.product)
         } catch (err) {
           self.setStatus("error")
           throw err

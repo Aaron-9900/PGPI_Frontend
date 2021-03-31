@@ -21,12 +21,19 @@ const StyledSpinner = styled(Spin)`
   margin-top: 50vh;
   position: "absolute";
 `
+const StyledSpace = styled(Space)`
+  border: solid;
+  border-width: 1px;
+  border-color: #f0f0f0;
+  padding: 7px;
+  margin: 5px;
+`
 
 export const ProductDetal = observer(function (props) {
   const { productId } = useParams<ProductDetailParams>()
   const { productsStore } = useStores()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const product = productsStore.products.find((p) => p.id === parseInt(productId))!
+  const product = productsStore.productsList.find((p) => p.id === parseInt(productId))!
   useEffect(() => {
     ;(async function () {
       await product.getInstances()
@@ -42,29 +49,31 @@ export const ProductDetal = observer(function (props) {
             gutter: 16,
             xs: 1,
             sm: 2,
-            md: 4,
+            md: 3,
             lg: 4,
-            xl: 6,
-            xxl: 3,
+            xl: 5,
+            xxl: 6,
           }}
           itemLayout="vertical"
           size="large"
           dataSource={product.instances}
           renderItem={(item) => (
-            <List.Item
-              key={item.id}
-              actions={[
-                <IconText icon="Fila: " text={item.row?.toString()} key="list-vertical-star-o" />,
-                <IconText
-                  icon="Columna: "
-                  text={item.col?.toString()}
-                  key="list-vertical-like-o"
-                />,
-              ]}
-            >
-              <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
-              {item.type}
-            </List.Item>
+            <StyledSpace>
+              <List.Item
+                key={item.id}
+                actions={[
+                  <IconText icon="Fila: " text={item.row?.toString()} key="list-vertical-star-o" />,
+                  <IconText
+                    icon="Columna: "
+                    text={item.col?.toString()}
+                    key="list-vertical-like-o"
+                  />,
+                ]}
+              >
+                <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
+                {item.type}
+              </List.Item>
+            </StyledSpace>
           )}
         />
       )}

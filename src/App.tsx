@@ -5,7 +5,7 @@ import { RootStoreProvider } from "./models/root-store/root-store-context"
 import { setupRootStore } from "./models/root-store/setup-root-store"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Spin } from "antd"
-import { Home, Register, Login } from "./screens"
+import { Home, Register, Login, Pedidos } from "./screens"
 import { ProductDetal } from "./screens/product-detail-screen"
 
 const App = observer(function App() {
@@ -27,6 +27,9 @@ const App = observer(function App() {
             </Route>
             <Route exact path="/">
               <Home></Home>
+            </Route>
+            <Route path="/pedidos">
+              <Pedidos />
             </Route>
             <Route path="/register">
               <Register></Register>

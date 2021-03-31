@@ -37,6 +37,7 @@ export type GeneralApiProblem =
    * The data we received is not in the expected format.
    */
   | { kind: "bad-data" }
+  | { kind: "conflict" }
 
 /**
  * Attempts to get a common cause of problems from an api response.
@@ -63,6 +64,8 @@ export function getGeneralApiProblem(response: ApiResponse<any>): GeneralApiProb
           return { kind: "forbidden" }
         case 404:
           return { kind: "not-found" }
+        case 409:
+          return { kind: "conflict" }
         default:
           return { kind: "rejected" }
       }

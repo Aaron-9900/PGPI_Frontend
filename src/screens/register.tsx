@@ -45,7 +45,7 @@ const Register = observer(() => {
   const { authStore } = useStores()
   const [err, setErr] = useState<string | false>(false)
   const [redirect, setRedirect] = useState<boolean>(false)
-  const verifyPasswordValidator = (_, verifyPassword, callback) => {
+  const verifyPasswordValidator = (_: any, verifyPassword: any, callback: any) => {
     console.log(verifyPassword, callback)
     if (verifyPassword !== form.getFieldValue("password")) {
       callback("Passwords do not match!")
@@ -53,7 +53,7 @@ const Register = observer(() => {
       callback()
     }
   }
-  const onFinish = async (value) => {
+  const onFinish = async (value: any) => {
     try {
       const resp = await authStore.register(value.email, value.name, value.password)
       setRedirect(true)
