@@ -7,7 +7,6 @@ import { PedidoListItem } from "../../components/pedido-list-item/pedido-list-it
 
 export const PedidosList = observer(function (props) {
   const { ordersStore } = useStores()
-  console.log("render")
   return (
     <List
       itemLayout="vertical"

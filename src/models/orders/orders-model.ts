@@ -8,7 +8,8 @@ export const OrdersModel = types
   .props({
     id: types.identifierNumber,
     productId: 0,
-    product: types.maybeNull(types.reference(ProductsModel)),
+    product: types.array(types.reference(ProductsModel)),
+    ammount: types.array(types.number),
     address: "",
     orderStatus: "",
     clientId: 0,

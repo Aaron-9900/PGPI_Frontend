@@ -23,7 +23,10 @@ export const Pedidos = observer(function (): JSX.Element {
   const { ordersStore } = useStores()
   const history = useHistory()
   useEffect(() => {
-    ordersStore.getOrders()
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    ;(async () => {
+      await ordersStore.getOrders()
+    })()
   }, [ordersStore])
   return (
     <Layout>

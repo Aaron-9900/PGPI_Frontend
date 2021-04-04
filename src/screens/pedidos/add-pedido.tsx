@@ -27,8 +27,13 @@ const StyledSpinner = styled(Spin)`
 const tailLayout = {
   wrapperCol: { offset: 4, span: 20 },
 }
+type SelectedProduct = {
+  value: number
+  content: string
+}
 export const AddPedido = observer(function (): JSX.Element {
   const { ordersStore, productsStore } = useStores()
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
   const [form] = Form.useForm()
   const [err, setErr] = useState<string | null>()
   return (
@@ -37,16 +42,18 @@ export const AddPedido = observer(function (): JSX.Element {
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
-      onFinish={async (value: { productId: any; ammount: number; address: string }) => {
+      onFinish={async (value: any) => {
         try {
+          const ammounts = selectedProducts.map((product) => value[product.content]).toString()
           const params = {
-            productId: value.productId,
-            ammount: value.ammount,
+            productIds: value.productIds.toString(),
+            ammounts: ammounts,
             address: value.address,
           }
-          console.log(value, params)
+          console.log(params)
           await ordersStore.postOrder(params)
           form.resetFields()
+          setSelectedProducts([])
         } catch (err) {
           setErr(parseError(err))
         }
@@ -54,15 +61,20 @@ export const AddPedido = observer(function (): JSX.Element {
       onFieldsChange={() => ordersStore.setStatus("idle")}
     >
       <Form.Item
-        name="productId"
+        name="productIds"
         label="Nombre del producto"
         rules={[{ required: true, message: "Selecciona un producto" }]}
       >
         <StyledSelect
           showSearch
+          mode="multiple"
           filterOption={(input, option) =>
             option?.content.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
+          onChange={(value: any, option: any) => {
+            const rOption = option as SelectedProduct[]
+            setSelectedProducts(rOption)
+          }}
         >
           {productsStore.productsList.map((product) => (
             <StyledSelectOption key={product.id} value={product.id} content={product.name}>
@@ -71,13 +83,19 @@ export const AddPedido = observer(function (): JSX.Element {
           ))}
         </StyledSelect>
       </Form.Item>
-      <Form.Item
-        name="ammount"
-        label="Cantidad de la orden"
-        rules={[{ required: true, message: "Introduce una cantidad" }]}
-      >
-        <StyledInputNumber />
-      </Form.Item>
+      {selectedProducts.map((product) => {
+        return (
+          <Form.Item
+            name={product.content}
+            label={`Cantidad de la orden para el producto ${product.content}`}
+            key={product.content + product.value}
+            rules={[{ required: true, message: "Introduce una cantidad" }]}
+          >
+            <StyledInputNumber />
+          </Form.Item>
+        )
+      })}
+
       <Form.Item
         name="address"
         label="Direccion de la orden"

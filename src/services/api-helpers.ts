@@ -20,9 +20,9 @@ export type BackendProductInstance = {
 }
 export type BackendOrder = {
   id: number
-  id_producto: number
+  id_producto: string
   id_cliente: number
-  cantidad: number
+  cantidad: string
   direccion: string
   estado: string
 }
@@ -32,7 +32,7 @@ export type BackendPosition = {
   id_posicion: number
   disponible: number
 }
-export type BackendPostOrderResponse = [BackendOrder, [[any, BackendPosition]]]
+export type BackendPostOrderResponse = [[[[BackendProductInstance, BackendPosition]]], BackendOrder]
 
 export function parseProduct(backendProduct: BackendProduct): ProductsModel {
   return cast({
@@ -58,11 +58,11 @@ export function parseInstance(backendInstance: BackendProductInstance): ProductI
 export function parseOrder(backendOrder: BackendOrder): OrdersModel {
   return cast({
     id: backendOrder.id,
-    productId: backendOrder.id_producto,
+    product: backendOrder.id_producto.split(",").map((id) => parseInt(id)),
     address: backendOrder.direccion,
-    product: null,
     clientId: backendOrder.id_cliente,
     orderStatus: backendOrder.estado,
+    ammount: backendOrder.cantidad.split(",").map((ammount) => parseInt(ammount)),
   })
 }
 
@@ -75,5 +75,6 @@ export function parseInstances(backendInstances: BackendProductInstance[]): Prod
 }
 
 export function parseOrders(backendOrders: BackendOrder[]): OrdersModel[] {
+  console.log(backendOrders)
   return backendOrders.map((order) => parseOrder(order))
 }

@@ -28,7 +28,13 @@ export const ProductItem = observer((props: ProductItemProps) => {
         />,
       ]}
     >
-      <List.Item.Meta title={<Link to={`/product/${item.id}`}>{item.name}</Link>} />
+      <List.Item.Meta
+        title={
+          <Link to={`/product/${item.id}`}>
+            {item.name} #{item.id}
+          </Link>
+        }
+      />
       {item.provider}
     </List.Item>
   )

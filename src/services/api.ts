@@ -60,7 +60,7 @@ export class Api {
       if (problem) throw problem
     }
     try {
-      return { kind: "ok", product: parseProduct(response.data[0] as BackendProduct) }
+      return { kind: "ok", product: parseProduct(response?.data[0]) }
     } catch {
       return { kind: "bad-data" }
     }
@@ -83,8 +83,8 @@ export class Api {
     const response: ApiResponse<BackendPostOrderResponse> = await this.client.post(
       "/pedido/order_pos",
       {
-        id_producto: order.productId,
-        cantidad: order.ammount,
+        id_producto: order.productIds,
+        cantidad: order.ammounts,
         id_cliente: 15,
         direccion: order.address,
       },
@@ -95,7 +95,11 @@ export class Api {
     }
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { kind: "ok", order: parseOrder(response.data[0]! as BackendOrder) }
+      return {
+        kind: "ok",
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        order: parseOrder(response.data[response.data.length - 1] as BackendOrder),
+      }
     } catch {
       return { kind: "bad-data" }
     }
@@ -109,7 +113,8 @@ export class Api {
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return { kind: "ok", orders: parseOrders(response.data as BackendOrder[]) }
-    } catch {
+    } catch (err) {
+      console.log(err)
       return { kind: "bad-data" }
     }
   }

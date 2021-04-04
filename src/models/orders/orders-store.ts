@@ -5,9 +5,9 @@ import { withStatus } from "../extensions/with-status"
 import { OrdersModel } from "./orders-model"
 
 export interface AddOrderParams {
-  productId: number
+  productIds: string
   address: string
-  ammount: number
+  ammounts: string
 }
 
 export const OrdersModelStore = types
