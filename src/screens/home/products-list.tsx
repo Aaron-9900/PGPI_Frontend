@@ -23,7 +23,7 @@ export const ProductsList = observer(function (props) {
         pageSize: 6,
         style: { display: "flex" },
       }}
-      dataSource={productsStore.productsList}
+      dataSource={productsStore.storeAsList}
       renderItem={(item) => <ProductItem item={item} />}
     />
   )

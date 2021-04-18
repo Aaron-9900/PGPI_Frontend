@@ -31,6 +31,9 @@ const App = observer(function App() {
             <Route path="/pedidos">
               <Pedidos />
             </Route>
+            <Route path="/order/:productId">
+              <ProductDetal />
+            </Route>
             <Route path="/register">
               <Register></Register>
             </Route>

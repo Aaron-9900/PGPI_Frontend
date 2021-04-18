@@ -80,7 +80,7 @@ export const AddRequestForm = observer(function (): JSX.Element {
             setNewProduct(value === "new")
           }}
         >
-          {productsStore.productsList.map((product) => (
+          {productsStore.storeAsList.map((product) => (
             <StyledSelectOption key={product.id} value={product.name}>
               {product.name}
             </StyledSelectOption>

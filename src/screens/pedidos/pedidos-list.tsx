@@ -15,7 +15,7 @@ export const PedidosList = observer(function (props) {
         pageSize: 6,
         style: { display: "flex" },
       }}
-      dataSource={ordersStore.ordersList}
+      dataSource={ordersStore.storeAsList}
       renderItem={(item) => <PedidoListItem item={item} />}
     />
   )

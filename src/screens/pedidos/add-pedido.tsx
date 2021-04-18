@@ -48,7 +48,11 @@ export const AddPedido = observer(function (): JSX.Element {
           const params = {
             productIds: value.productIds.toString(),
             ammounts: ammounts,
+            name: value.name,
             address: value.address,
+            agency: value.agency,
+            type: value.type,
+            postalCode: value.postalCode,
           }
           console.log(params)
           await ordersStore.postOrder(params)
@@ -76,7 +80,7 @@ export const AddPedido = observer(function (): JSX.Element {
             setSelectedProducts(rOption)
           }}
         >
-          {productsStore.productsList.map((product) => (
+          {productsStore.storeAsList.map((product) => (
             <StyledSelectOption key={product.id} value={product.id} content={product.name}>
               {product.name}
             </StyledSelectOption>
@@ -102,6 +106,46 @@ export const AddPedido = observer(function (): JSX.Element {
         rules={[{ required: true, message: "Introduce una direccion" }]}
       >
         <StyledInput />
+      </Form.Item>
+      <Form.Item
+        name="postalCode"
+        label="Código postal"
+        rules={[{ required: true, message: "Introduce un código postal" }]}
+      >
+        <StyledInputNumber />
+      </Form.Item>
+      <Form.Item
+        name="name"
+        label="Nombre del receptor"
+        rules={[{ required: true, message: "Introduce una nombre" }]}
+      >
+        <StyledInput />
+      </Form.Item>
+      <Form.Item
+        name="type"
+        label="Tipo de envío"
+        rules={[{ required: true, message: "Selecciona un tipo de envío" }]}
+      >
+        <StyledSelect defaultValue="Estándar">
+          {["Estándar", "Urgente"].map((type) => (
+            <StyledSelectOption key={type} value={type} content={type}>
+              {type}
+            </StyledSelectOption>
+          ))}
+        </StyledSelect>
+      </Form.Item>
+      <Form.Item
+        name="agency"
+        label="Agencia de transporte"
+        rules={[{ required: true, message: "Selecciona una agencia de transporte" }]}
+      >
+        <StyledSelect>
+          {["Correos", "SEUR", "DHL"].map((type) => (
+            <StyledSelectOption key={type} value={type} content={type}>
+              {type}
+            </StyledSelectOption>
+          ))}
+        </StyledSelect>
       </Form.Item>
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">

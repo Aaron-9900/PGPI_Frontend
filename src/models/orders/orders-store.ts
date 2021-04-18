@@ -8,6 +8,10 @@ export interface AddOrderParams {
   productIds: string
   address: string
   ammounts: string
+  name: string
+  agency: "SEUR" | "DHL" | "Correos"
+  type: "Estándar" | "Urgente"
+  postalCode: number
 }
 
 export const OrdersModelStore = types
@@ -19,7 +23,7 @@ export const OrdersModelStore = types
   .extend(withStatus)
   .views((self) => {
     return {
-      get ordersList() {
+      get storeAsList() {
         return Array.from(self.orders.values())
       },
     }

@@ -1,20 +1,30 @@
 import apisauce, { ApiResponse, ApisauceInstance } from "apisauce"
+import moment from "moment"
 import Cookies from "universal-cookie/es6"
 import { AddOrderParams } from "../models/orders/orders-store"
 import { ProductParams } from "../models/products-model/products-store"
 import {
   BackendOrder,
+  BackendOrderInstances,
   BackendPostOrderResponse,
   BackendProduct,
   BackendProductInstance,
   parseInstances,
   parseOrder,
+  parseOrderInstances,
   parseOrders,
   parseProduct,
   parseProducts,
 } from "./api-helpers"
 import { getGeneralApiProblem } from "./api-problem"
-import { GetOrders, GetProductInstances, GetProducts, PostOrder, PostProduct } from "./api-types"
+import {
+  GetOrders,
+  GetProductInstances,
+  GetProducts,
+  PostOrder,
+  PostOrderStatus,
+  PostProduct,
+} from "./api-types"
 import { ApiConfig, API_CONFIG } from "./apiconfig"
 
 export class Api {
@@ -60,7 +70,8 @@ export class Api {
       if (problem) throw problem
     }
     try {
-      return { kind: "ok", product: parseProduct(response?.data[0]) }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return { kind: "ok", product: parseProduct(response!.data![0]) }
     } catch {
       return { kind: "bad-data" }
     }
@@ -79,7 +90,54 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+  async setToOnItsWay(id: number): Promise<PostOrderStatus> {
+    const response: ApiResponse<any> = await this.client.post("/pedido/order_del", null, {
+      params: { id: id },
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    console.log(response)
+    try {
+      return { kind: "ok", status: response?.data ?? false }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async setRecieved(id: number): Promise<PostOrderStatus> {
+    const response: ApiResponse<any> = await this.client.post("pedido/order_state_recieved", null, {
+      params: { id: id },
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    console.log(response)
+    try {
+      return { kind: "ok", status: response?.data ?? false }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async getProductInstancesFromOrder(id: number): Promise<GetProductInstances> {
+    const response: ApiResponse<
+      BackendProductInstance[]
+    > = await this.client.get("/pedido/pedidoid_pos", { id: id })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    console.log(response)
+    try {
+      return { kind: "ok", instances: parseOrderInstances(response.data as BackendOrderInstances) }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
   async addOrder(order: AddOrderParams): Promise<PostOrder> {
+    console.log(order)
     const response: ApiResponse<BackendPostOrderResponse> = await this.client.post(
       "/pedido/order_pos",
       {
@@ -87,6 +145,12 @@ export class Api {
         cantidad: order.ammounts,
         id_cliente: 15,
         direccion: order.address,
+        agencia: order.agency,
+        tipo: order.type,
+        nombre: order.name,
+        cod_postal: order.postalCode,
+        fecha_Entrega: moment(),
+        fecha_Pedido: moment(),
       },
     )
     if (!response.ok) {
@@ -94,11 +158,10 @@ export class Api {
       if (problem) throw problem
     }
     try {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return {
         kind: "ok",
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        order: parseOrder(response.data[response.data.length - 1] as BackendOrder),
+        order: parseOrder(response!.data![response!.data!.length - 1] as BackendOrder),
       }
     } catch {
       return { kind: "bad-data" }

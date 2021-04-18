@@ -19,3 +19,4 @@ export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiP
 export type GetProductInstances = { kind: "ok"; instances: ProductInstance[] } | GeneralApiProblem
 export type PostOrder = { kind: "ok"; order: OrdersModel } | GeneralApiProblem
 export type GetOrders = { kind: "ok"; orders: OrdersModel[] } | GeneralApiProblem
+export type PostOrderStatus = { kind: "ok"; status: boolean } | GeneralApiProblem

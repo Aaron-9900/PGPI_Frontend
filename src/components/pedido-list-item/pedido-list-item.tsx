@@ -28,7 +28,13 @@ export const PedidoListItem = observer((props: PedidoListProps) => {
   return (
     <List.Item key={item.id}>
       <List.Item.Meta
-        title={<Link to={`/product/${item.id}`}>Dirección: {item.address}</Link>}
+        title={
+          item.orderStatus === "Preparación" ? (
+            <Link to={`/order/${item.id}`}>Dirección: {item.address}</Link>
+          ) : (
+            <Text>Dirección: {item.address}</Text>
+          )
+        }
         description={`#ID: ${item.id}`}
       />
       <Text>Productos:</Text>
@@ -37,7 +43,7 @@ export const PedidoListItem = observer((props: PedidoListProps) => {
           Nombre: {i.name} | Cantidad: {item.ammount[idx]}
         </StyledParagraph>
       ))}
-      <Button>{item.orderStatus}</Button>
+      <Button onClick={() => item.setOrderStatus(item.orderStatus)}>{item.orderStatus}</Button>
     </List.Item>
   )
 })

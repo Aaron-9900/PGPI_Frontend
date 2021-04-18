@@ -19,7 +19,7 @@ export const ProductsModelStore = types
   .extend(withStatus)
   .views((self) => {
     return {
-      get productsList() {
+      get storeAsList() {
         return Array.from(self.products.values())
       },
     }

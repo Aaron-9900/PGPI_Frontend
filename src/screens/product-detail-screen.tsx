@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-extra-semi */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { useStores } from "../models/root-store/root-store-context"
 import { List, Space, Spin } from "antd"
 import styled from "styled-components"
+import { ProductsModelStore } from "../models/products-model/products-store"
+import { OrdersModelStore } from "../models/orders/orders-store"
+import { ProductsModel } from "../models/products-model/products-model"
+import { OrdersModel } from "../models/orders/orders-model"
 
 interface ProductDetailParams {
   productId: string
@@ -30,12 +34,25 @@ const StyledSpace = styled(Space)`
 `
 
 export const ProductDetal = observer(function (props) {
+  const location = useLocation()
+  const { productsStore, ordersStore } = useStores()
+  let isProduct = false
+  let store: ProductsModelStore | OrdersModelStore
+  if (location.pathname.includes("product")) {
+    store = productsStore
+    isProduct = true
+  } else {
+    store = ordersStore
+  }
   const { productId } = useParams<ProductDetailParams>()
-  const { productsStore } = useStores()
+  console.log(location)
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const product = productsStore.productsList.find((p) => p.id === parseInt(productId))!
+  const product: ProductsModel | OrdersModel =
+    // @ts-expect-error Wrong ts behavour
+    store.storeAsList.find((p) => p.id === parseInt(productId)) ?? []
   useEffect(() => {
     ;(async function () {
+      console.log(product)
       await product.getInstances()
     })()
   }, [])
@@ -70,7 +87,10 @@ export const ProductDetal = observer(function (props) {
                   />,
                 ]}
               >
-                <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
+                {
+                  // @ts-expect-error Wrong ts behavour
+                  isProduct && <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
+                }
                 {item.type}
               </List.Item>
             </StyledSpace>
