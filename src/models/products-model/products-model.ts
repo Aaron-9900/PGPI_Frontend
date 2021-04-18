@@ -13,6 +13,7 @@ export const ProductsModel = types
     provider: "",
     stock: 0,
     preparation: 0,
+    restock: false,
     instances: types.array(ProductInstance),
   })
   .extend(withEnvironment)

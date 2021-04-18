@@ -1,4 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { ProductsModel } from "./products-model"
+
 export const ProductInstance = types
   .model("ProductInstance")
   .props({
@@ -6,6 +8,7 @@ export const ProductInstance = types
     row: 0,
     col: 0,
     type: types.union(types.literal("Preparacion"), types.literal("Stock")),
+    product: types.maybeNull(types.number),
   })
   .actions((self) => {
     return {}

@@ -16,6 +16,7 @@ export const OrdersModel = types
     clientId: 0,
     agency: "",
     type: "",
+    name: "",
     postalCode: 0,
     weight: 0,
     createdDate: types.Date,

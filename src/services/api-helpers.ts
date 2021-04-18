@@ -11,6 +11,7 @@ export type BackendProduct = {
   proveedor: string
   stock: number
   preparacion: number
+  restock: boolean
 }
 export type BackendProductInstance = {
   id: number
@@ -18,8 +19,8 @@ export type BackendProductInstance = {
   columna: number
   tipo: "Preparacion" | "Stock"
 }
-
-export type BackendOrderInstances = [BackendProductInstance[], any]
+type backendWeirdShit = [number, BackendProductInstance[]]
+export type BackendOrderInstances = [backendWeirdShit[], any]
 
 type BackendOrderStatus = "PREPARACION" | "PENDIENTE" | "EN CAMINO" | "RECIBIDO"
 
@@ -32,6 +33,7 @@ export type BackendOrder = {
   estado: BackendOrderStatus
   tipo: string
   agencia: string
+  nombre: string
   fecha_Entrega: Date
   fecha_Pedido: Date
   cod_postal: number
@@ -69,6 +71,7 @@ export function parseProduct(backendProduct: BackendProduct): ProductsModel {
     provider: backendProduct.proveedor,
     stock: backendProduct.stock,
     preparation: backendProduct.preparacion,
+    restock: backendProduct.restock,
   })
 }
 
@@ -78,6 +81,7 @@ export function parseInstance(backendInstance: BackendProductInstance): ProductI
     col: backendInstance.columna,
     row: backendInstance.fila,
     type: backendInstance.tipo,
+    product: null,
   }
 }
 
@@ -90,6 +94,7 @@ export function parseOrder(backendOrder: BackendOrder): OrdersModel {
     orderStatus: parseState(backendOrder.estado),
     ammount: backendOrder.cantidad.split(",").map((ammount) => parseInt(ammount)),
     type: backendOrder.tipo,
+    name: backendOrder.nombre,
     postalCode: backendOrder.cod_postal,
     agency: backendOrder.agencia,
     weight: backendOrder.peso,
@@ -105,13 +110,23 @@ export function parseProducts(backendProducts: BackendProduct[]): ProductsModel[
 export function parseInstances(backendInstances: BackendProductInstance[]): ProductInstance[] {
   return backendInstances.map((instance) => parseInstance(instance))
 }
+function parseBackendWeirdShit(bws: backendWeirdShit[]): ProductInstance[] {
+  return bws.flatMap((element) => {
+    return element[1].map((e) => {
+      return {
+        ...parseInstance(e),
+        product: element[0],
+      }
+    })
+  })
+}
 export function parseOrderInstances(
-  backendOrderInstances: BackendOrderInstances,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  backendOrderInstances: any,
 ): ProductInstance[] {
-  console.log(backendOrderInstances)
-  return parseInstances(backendOrderInstances[0])
+  const realItem = backendOrderInstances.slice(0, backendOrderInstances.length - 1) // we dont need last element
+  return parseBackendWeirdShit(realItem as backendWeirdShit[])
 }
 export function parseOrders(backendOrders: BackendOrder[]): OrdersModel[] {
-  console.log(backendOrders)
   return backendOrders.map((order) => parseOrder(order))
 }

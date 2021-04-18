@@ -7,11 +7,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Spin } from "antd"
 import { Home, Register, Login, Pedidos } from "./screens"
 import { ProductDetal } from "./screens/product-detail-screen"
+import moment from "moment"
 
 const App = observer(function App() {
   const [rootStore, setRootStore] = useState<RootStore | null>(null)
   useEffect(() => {
     async function setup() {
+      moment.locale("es")
       setupRootStore().then(setRootStore)
     }
     setup()

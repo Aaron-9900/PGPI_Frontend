@@ -45,14 +45,11 @@ export const ProductDetal = observer(function (props) {
     store = ordersStore
   }
   const { productId } = useParams<ProductDetailParams>()
-  console.log(location)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const product: ProductsModel | OrdersModel =
-    // @ts-expect-error Wrong ts behavour
+    // @ts-expect-error Dunno
     store.storeAsList.find((p) => p.id === parseInt(productId)) ?? []
   useEffect(() => {
     ;(async function () {
-      console.log(product)
       await product.getInstances()
     })()
   }, [])
@@ -73,7 +70,7 @@ export const ProductDetal = observer(function (props) {
           }}
           itemLayout="vertical"
           size="large"
-          dataSource={product.instances}
+          dataSource={product.instances as any[]}
           renderItem={(item) => (
             <StyledSpace>
               <List.Item
@@ -87,10 +84,15 @@ export const ProductDetal = observer(function (props) {
                   />,
                 ]}
               >
-                {
-                  // @ts-expect-error Wrong ts behavour
-                  isProduct && <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
-                }
+                {isProduct ? (
+                  <List.Item.Meta title={product.name + ` #${item.id.toString()}`} />
+                ) : (
+                  <List.Item.Meta
+                    title={
+                      productsStore.products.get(item.product)?.name + ` #${item.id.toString()}`
+                    }
+                  />
+                )}
                 {item.type}
               </List.Item>
             </StyledSpace>
