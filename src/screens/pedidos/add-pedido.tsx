@@ -126,7 +126,7 @@ export const AddPedido = observer(function (): JSX.Element {
         label="Tipo de envío"
         rules={[{ required: true, message: "Selecciona un tipo de envío" }]}
       >
-        <StyledSelect defaultValue="Estándar">
+        <StyledSelect>
           {["Estándar", "Urgente"].map((type) => (
             <StyledSelectOption key={type} value={type} content={type}>
               {type}

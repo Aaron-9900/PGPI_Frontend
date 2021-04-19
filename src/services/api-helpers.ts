@@ -22,7 +22,7 @@ export type BackendProductInstance = {
 type backendWeirdShit = [number, BackendProductInstance[]]
 export type BackendOrderInstances = [backendWeirdShit[], any]
 
-type BackendOrderStatus = "PREPARACION" | "PENDIENTE" | "EN CAMINO" | "RECIBIDO"
+type BackendOrderStatus = "PREPARACION" | "PENDIENTE" | "EN CAMINO" | "RECIBIDO" | "Pendiente"
 
 export type BackendOrder = {
   id: number
@@ -52,6 +52,7 @@ function parseState(
 ): "Preparación" | "Pendiente" | "En camino" | "Recibido" {
   switch (status) {
     case "PENDIENTE":
+    case "Pendiente":
       return "Pendiente"
     case "EN CAMINO":
       return "En camino"
@@ -63,6 +64,7 @@ function parseState(
 }
 
 export function parseProduct(backendProduct: BackendProduct): ProductsModel {
+  console.log(backendProduct)
   return cast({
     id: backendProduct.id,
     quantity: backendProduct.cantidad,

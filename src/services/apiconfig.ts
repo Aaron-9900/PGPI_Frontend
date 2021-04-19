@@ -5,5 +5,5 @@ export interface ApiConfig {
 
 export const API_CONFIG: ApiConfig = {
   baseUrl: "http://localhost:8888/PGPI/api/backend/",
-  timeout: 10000,
+  timeout: 20000,
 }

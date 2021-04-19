@@ -35,8 +35,10 @@ export const OrdersModelStore = types
         try {
           const response: GetOrders = yield self.environment.api.getOrders()
           self.setStatus("idle")
+          console.log(response)
           if (response.kind === "ok") {
             const orders = response.orders
+            self.orders.clear()
             orders.forEach((product) => self.orders.put(product))
           } else {
             throw response

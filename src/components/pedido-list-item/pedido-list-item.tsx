@@ -1,6 +1,6 @@
-import { Button, List, Space, Table } from "antd"
+import { Button, List, Modal, Space, Spin, Table } from "antd"
 import { observer } from "mobx-react-lite"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { OrdersModel } from "../../models/orders/orders-model"
 import { ProductsModel } from "../../models/products-model/products-model"
@@ -13,6 +13,10 @@ const { Text, Paragraph } = Typography
 interface PedidoListProps {
   item: OrdersModel
 }
+const StyledSpinner = styled(Spin)`
+  height: "100%";
+  width: "100%";
+`
 const StyledParagraph = styled(Paragraph)`
   margin-top: 0.5em;
   margin-bottom: 0.5em !important;
@@ -30,8 +34,22 @@ const IconText = ({ icon, text }: { icon: string; text?: string }) => (
   </Space>
 )
 
+const parseOrderStatus = (status: string): string => {
+  switch (status) {
+    case "En camino":
+      return "Poner produto como entregado."
+    case "Preparación":
+      return "Recoger instancias y enviar producto."
+  }
+  return status
+}
+
 export const PedidoListItem = observer((props: PedidoListProps) => {
   const { item } = props
+  const [isModalVisible, setModalVisible] = useState(false)
+  useEffect(() => {
+    setModalVisible(item.status === "pending" && item.orderStatus === "Pendiente")
+  }, [item.status, item.orderStatus])
   return (
     <StyledListItem key={item.id}>
       <div style={{ flex: 1 }}>
@@ -57,10 +75,21 @@ export const PedidoListItem = observer((props: PedidoListProps) => {
         <StyledParagraph>Empresa de envío: {item.agency}</StyledParagraph>
         {item.orderStatus === "Pendiente" ? (
           <Button danger onClick={() => item.setOrderStatus(item.orderStatus)}>
-            Hacer reestock
+            {item.status === "pending" ? null : "Hacer reestock"}
+            <Modal
+              title="Haciendo reestock"
+              footer={null}
+              closable={false}
+              visible={isModalVisible}
+            >
+              <StyledSpinner />
+              <p>Haciendo reestock...</p>
+            </Modal>
           </Button>
         ) : (
-          <Button onClick={() => item.setOrderStatus(item.orderStatus)}>{item.orderStatus}</Button>
+          <Button onClick={() => item.setOrderStatus(item.orderStatus)}>
+            {item.status === "pending" ? <StyledSpinner /> : parseOrderStatus(item.orderStatus)}
+          </Button>
         )}
       </div>
       {item.orderStatus === "Recibido" && (
@@ -73,6 +102,7 @@ export const PedidoListItem = observer((props: PedidoListProps) => {
           </PDFDownloadLink>
         </div>
       )}
+      {item.status === "error" && <Text type="danger">Error en el proceso</Text>}
     </StyledListItem>
   )
 })

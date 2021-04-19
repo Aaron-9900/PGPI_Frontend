@@ -76,9 +76,9 @@ const AlbaranWeights = (props: AlbaranDateProps) => {
     case "DHL":
       return <></>
     case "SEUR":
-      return <Text style={styles.secondaryText}>Peso: {order.weight.toString()}gr</Text>
+      return <Text style={styles.secondaryText}>Peso: {order.weight.toString()}kg</Text>
     case "Correos":
-      return <Text style={styles.secondaryText}>Peso: {order.weight.toString()}gr</Text>
+      return <Text style={styles.secondaryText}>Peso: {order.weight.toString()}kg</Text>
     default:
       return <></>
   }

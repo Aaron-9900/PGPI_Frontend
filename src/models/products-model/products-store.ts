@@ -33,6 +33,7 @@ export const ProductsModelStore = types
           self.setStatus("idle")
           if (response.kind === "ok") {
             const products = response.product
+            self.products.clear()
             products.forEach((product) => self.products.put(product))
           } else {
             throw response

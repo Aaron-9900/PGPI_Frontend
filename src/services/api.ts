@@ -54,12 +54,13 @@ export class Api {
     try {
       return { kind: "ok", product: parseProducts(response.data as BackendProduct[]) }
     } catch {
+      console.log("err")
       return { kind: "bad-data" }
     }
   }
   async addProducts(product: ProductParams): Promise<PostProduct> {
     console.log(product)
-    const response: ApiResponse<BackendProduct[]> = await this.client.post("/producto/add", {
+    const response: ApiResponse<BackendProduct> = await this.client.post("/producto/add", {
       nombre: product.name,
       cantidad: product.quantity,
       proveedor: product.provider,
@@ -71,7 +72,7 @@ export class Api {
     }
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return { kind: "ok", product: parseProduct(response!.data![0]) }
+      return { kind: "ok", product: parseProduct(response!.data!) }
     } catch {
       return { kind: "bad-data" }
     }
@@ -108,6 +109,21 @@ export class Api {
   async setRecieved(id: number): Promise<PostOrderStatus> {
     const response: ApiResponse<any> = await this.client.post("pedido/order_state_recieved", null, {
       params: { id: id },
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    console.log(response)
+    try {
+      return { kind: "ok", status: response?.data ?? false }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async doRestock(restockIds: number[], orderId: number): Promise<PostOrderStatus> {
+    const response: ApiResponse<any> = await this.client.post("/pedido/pending_order", null, {
+      params: { prod_ids_restock: restockIds.toString(), id: orderId },
     })
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
