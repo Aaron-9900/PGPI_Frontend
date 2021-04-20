@@ -56,7 +56,10 @@ export const OrdersModel = types
               self.orderStatus = "Recibido"
               break
             case "Pendiente":
-              response = yield self.environment.api.doRestock(self.product.map(product => product.id) ,self.id)
+              response = yield self.environment.api.doRestock(
+                self.product.map((product) => product.id),
+                self.id,
+              )
               if (response.kind !== "ok" || !response.status) {
                 throw response
               }
@@ -70,7 +73,7 @@ export const OrdersModel = types
               self.orderStatus = "En camino"
               break
             case "Recibido":
-              break;
+              break
             default:
               throw new Error("PANIC")
           }

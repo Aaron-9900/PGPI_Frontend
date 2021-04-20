@@ -34,8 +34,7 @@ export const OrdersModelStore = types
         self.setStatus("pending")
         try {
           const response: GetOrders = yield self.environment.api.getOrders()
-          self.setStatus("idle")
-          console.log(response)
+          self.setStatus("done")
           if (response.kind === "ok") {
             const orders = response.orders
             self.orders.clear()

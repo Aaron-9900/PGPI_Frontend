@@ -34,6 +34,7 @@ type SelectedProduct = {
 export const AddPedido = observer(function (): JSX.Element {
   const { ordersStore, productsStore } = useStores()
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([])
+  const [posting, setPosting] = useState<boolean>(false)
   const [form] = Form.useForm()
   const [err, setErr] = useState<string | null>()
   return (
@@ -54,8 +55,9 @@ export const AddPedido = observer(function (): JSX.Element {
             type: value.type,
             postalCode: value.postalCode,
           }
-          console.log(params)
+          setPosting(false)
           await ordersStore.postOrder(params)
+          setPosting(true)
           form.resetFields()
           setSelectedProducts([])
         } catch (err) {
@@ -153,7 +155,9 @@ export const AddPedido = observer(function (): JSX.Element {
         </Button>
       </Form.Item>
       {ordersStore.status === "error" && <Text type="danger">{err}</Text>}
-      {ordersStore.status === "done" && <Text type="success">Producto agregado con exito</Text>}
+      {ordersStore.status === "done" && posting && (
+        <Text type="success">Producto agregado con exito</Text>
+      )}
     </Form>
   )
 })

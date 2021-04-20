@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import Logo from "../../assets/logo.png"
 
 import { OrdersModel } from "../../models/orders/orders-model"
@@ -105,7 +105,7 @@ const AlbaranItems = (props: AlbaranDateProps) => {
   }
 }
 
-export const Albaran = (props: AlbaranProps): JSX.Element => {
+const Albaran = (props: AlbaranProps): JSX.Element => {
   const { order } = props
   return (
     <Document>
@@ -136,3 +136,4 @@ export const Albaran = (props: AlbaranProps): JSX.Element => {
     </Document>
   )
 }
+export default memo(Albaran)
