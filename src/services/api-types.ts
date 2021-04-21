@@ -17,6 +17,6 @@ export type GetUsersResult =
 export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem
 export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiProblem
 export type GetProductInstances = { kind: "ok"; instances: ProductInstance[] } | GeneralApiProblem
-export type PostOrder = { kind: "ok"; order: OrdersModel } | GeneralApiProblem
+export type PostOrder = { kind: "ok"; order: OrdersModel, restockId: number[] | any } | GeneralApiProblem
 export type GetOrders = { kind: "ok"; orders: OrdersModel[] } | GeneralApiProblem
 export type PostOrderStatus = { kind: "ok"; status: boolean } | GeneralApiProblem

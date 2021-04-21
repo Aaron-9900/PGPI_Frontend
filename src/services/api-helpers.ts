@@ -45,7 +45,7 @@ export type BackendPosition = {
   id_posicion: number
   disponible: number
 }
-export type BackendPostOrderResponse = [[[[BackendProductInstance, BackendPosition]]], BackendOrder]
+export type BackendPostOrderResponse = [[[[BackendProductInstance, BackendPosition]]] | number[], BackendOrder]
 
 function parseState(
   status: BackendOrderStatus,

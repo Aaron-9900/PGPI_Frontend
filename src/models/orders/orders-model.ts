@@ -57,13 +57,14 @@ export const OrdersModel = types
               break
             case "Pendiente":
               response = yield self.environment.api.doRestock(
-                self.product.map((product) => product.id),
+                self.product.filter(product => product.restock).map((product) => product.id),
                 self.id,
               )
               if (response.kind !== "ok" || !response.status) {
                 throw response
               }
               self.orderStatus = "Preparación"
+              self.product.forEach(product => product.setRestock(false))
               break
             case "Preparación":
               response = yield self.environment.api.setToOnItsWay(self.id)

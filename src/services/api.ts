@@ -178,6 +178,8 @@ export class Api {
         kind: "ok",
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         order: parseOrder(response!.data![response!.data!.length - 1] as BackendOrder),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        restockId: response!.data![0]
       }
     } catch {
       return { kind: "bad-data" }

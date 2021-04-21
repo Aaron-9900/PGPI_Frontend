@@ -31,7 +31,12 @@ export async function setupRootStore() {
   const env = await createEnvironment()
   if (localStorage.getItem(ROOT_STATE_STORAGE_KEY) !== null) {
     const data = JSON.parse(localStorage.getItem(ROOT_STATE_STORAGE_KEY) as string)
-    rootStore = RootStoreModel.create(data, env)
+    try {
+      rootStore = RootStoreModel.create(data, env)
+    } catch (err) {
+      console.log(err)
+      rootStore = RootStoreModel.create({}, env)
+    }
   } else {
     rootStore = RootStoreModel.create({}, env)
   }

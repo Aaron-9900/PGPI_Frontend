@@ -40,7 +40,7 @@ export const AddPedido = observer(function (): JSX.Element {
   return (
     <Form
       form={form}
-      labelCol={{ span: 4 }}
+      labelCol={{ span: 6 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
       onFinish={async (value: any) => {
@@ -56,7 +56,12 @@ export const AddPedido = observer(function (): JSX.Element {
             postalCode: value.postalCode,
           }
           setPosting(false)
-          await ordersStore.postOrder(params)
+          const response: number[] | null = await ordersStore.postOrder(params)
+          if(response) {
+            response.forEach(productId => {
+              productsStore.products.get(productId.toString())?.setRestock(true)
+            })
+          }
           setPosting(true)
           form.resetFields()
           setSelectedProducts([])

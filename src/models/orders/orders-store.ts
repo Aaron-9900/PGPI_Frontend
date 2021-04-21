@@ -37,6 +37,7 @@ export const OrdersModelStore = types
           self.setStatus("done")
           if (response.kind === "ok") {
             const orders = response.orders
+            console.log(orders)
             self.orders.clear()
             orders.forEach((product) => self.orders.put(product))
           } else {
@@ -56,6 +57,11 @@ export const OrdersModelStore = types
             throw response
           }
           self.orders.put(response.order)
+          if(response.restockId instanceof Array && typeof response.restockId[0] === "number") {
+            return response.restockId
+          } else {
+            return null
+          }
         } catch (err) {
           self.setStatus("error")
           throw err

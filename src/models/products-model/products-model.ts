@@ -20,6 +20,9 @@ export const ProductsModel = types
   .extend(withStatus)
   .actions((self) => {
     return {
+      setRestock: function(val: boolean) {
+        self.restock = val
+      },
       getInstances: flow(function* () {
         self.setStatus("pending")
         try {

@@ -71,10 +71,8 @@ const ActionButton = observer((props: { row: OrdersModel }) => {
   if (row.orderStatus === "Pendiente") {
     return (
       <Button danger onClick={async () => await row.setOrderStatus(row.orderStatus)}>
-        <Button danger onClick={async () => await row.setOrderStatus(row.orderStatus)}>
-          {row.status === "pending" ? null : "Hacer reestock"}
-          <ModalDisplay item={row} />
-        </Button>
+        {row.status === "pending" ? null : "Hacer reestock"}
+        <ModalDisplay item={row} />
       </Button>
     )
   } else if (row.orderStatus === "Recibido") {
@@ -86,6 +84,23 @@ const ActionButton = observer((props: { row: OrdersModel }) => {
     </Button>
   )
 })
+
+const ProductsList = observer((props: { row: OrdersModel }) => {
+  const { row } = props
+  return (
+    <>
+      {row.product.map((i, idx) => (
+        <StyledParagraph key={i.id}>
+          Nombre: {i.name} | Cantidad: {row.ammount[idx]} {console.log(row.orderStatus, i.restock)}
+          {row.orderStatus === "Pendiente" && i.restock ? (
+            <Text type="danger">Necesita restock</Text>
+          ) : null}
+        </StyledParagraph>
+      ))}
+    </>
+  )
+})
+
 const Status = observer((props: { row: OrdersModel }) => {
   const { row } = props
   return <StyledParagraph>{row.orderStatus}</StyledParagraph>
@@ -112,15 +127,7 @@ export const PedidoListItem = [
     title: "Productos",
     dataIndex: "product",
     key: "product",
-    render: (product: ProductsModel[], row: OrdersModel) =>
-      row.product.map((i, idx) => (
-        <StyledParagraph key={i.id}>
-          Nombre: {i.name} | Cantidad: {row.ammount[idx]}{" "}
-          {row.orderStatus === "Pendiente" && i.restock ? (
-            <Text type="danger">Necesita restock</Text>
-          ) : null}
-        </StyledParagraph>
-      )),
+    render: (product: ProductsModel[], row: OrdersModel) => <ProductsList row={row} />,
   },
   {
     title: "Empresa de envío",
@@ -138,6 +145,12 @@ export const PedidoListItem = [
     title: "Cambiar estado",
     key: "agency",
     render: (_: string, row: OrdersModel) => <ActionButton row={row} />,
+  },
+  {
+    title: "Tipo de pedido",
+    key: "type",
+    dataIndex: "type",
+    render: (val: string) => <Text>{val}</Text>,
   },
   {
     title: "Descargar albarán",
