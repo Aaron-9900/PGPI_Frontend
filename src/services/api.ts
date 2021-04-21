@@ -179,7 +179,7 @@ export class Api {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         order: parseOrder(response!.data![response!.data!.length - 1] as BackendOrder),
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        restockId: response!.data![0]
+        restockId: response!.data![0],
       }
     } catch {
       return { kind: "bad-data" }
@@ -194,6 +194,22 @@ export class Api {
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return { kind: "ok", orders: parseOrders(response.data as BackendOrder[]) }
+    } catch (err) {
+      console.log(err)
+      return { kind: "bad-data" }
+    }
+  }
+  async postRestock(id: string): Promise<PostProduct> {
+    const response: ApiResponse<any> = await this.client.post("producto/addID", null, {
+      params: { id: id },
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return { kind: "ok", product: parseProduct(response!.data!) }
     } catch (err) {
       console.log(err)
       return { kind: "bad-data" }

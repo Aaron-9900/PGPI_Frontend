@@ -6,6 +6,7 @@ import { Table } from "antd"
 import { PedidoListItem } from "../../components/pedido-list-item/pedido-list-item"
 import styled from "styled-components"
 import { Typography } from "antd"
+import { OrdersModel } from "../../models/orders/orders-model"
 const { Paragraph, Text } = Typography
 const StyledParagraph = styled(Paragraph)`
   margin-top: 0.5em;

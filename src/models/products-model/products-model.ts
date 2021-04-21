@@ -1,5 +1,5 @@
 import { applySnapshot, cast, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { GetProductInstances } from "../../services/api-types"
+import { GetProductInstances, PostProduct } from "../../services/api-types"
 import { withEnvironment } from "../extensions/with-environment"
 import { withStatus } from "../extensions/with-status"
 import { ProductInstance } from "./product-instance"
@@ -20,9 +20,23 @@ export const ProductsModel = types
   .extend(withStatus)
   .actions((self) => {
     return {
-      setRestock: function(val: boolean) {
+      setRestock: function (val: boolean) {
         self.restock = val
       },
+      doRestock: flow(function* () {
+        self.status = "pending"
+        try {
+          const response: PostProduct = yield self.environment.api.postRestock(self.id.toString())
+          if (response.kind !== "ok") {
+            throw response
+          }
+          self.status = "done"
+          applySnapshot(self, response.product)
+        } catch (err) {
+          self.status = "error"
+          console.error(err)
+        }
+      }),
       getInstances: flow(function* () {
         self.setStatus("pending")
         try {

@@ -47,7 +47,7 @@ const ModalDisplay = observer((props: { item: OrdersModel }) => {
   )
 })
 
-function Pdf(props: { row: OrdersModel }) {
+const Pdf = observer((props: { row: OrdersModel }) => {
   const { ordersStore } = useStores()
   const { row } = props
   return (
@@ -64,7 +64,7 @@ function Pdf(props: { row: OrdersModel }) {
       )}
     </>
   )
-}
+})
 
 const ActionButton = observer((props: { row: OrdersModel }) => {
   const { row } = props

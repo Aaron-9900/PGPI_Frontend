@@ -1,8 +1,12 @@
-import { List, Space } from "antd"
+import { Button, List, Space, Spin } from "antd"
 import { observer } from "mobx-react-lite"
 import React from "react"
 import { Link } from "react-router-dom"
 import { ProductsModel } from "../../models/products-model/products-model"
+import { Typography } from "antd"
+import styled from "styled-components"
+
+const { Text } = Typography
 
 interface ProductItemProps {
   item: ProductsModel
@@ -13,6 +17,13 @@ const IconText = ({ icon, text }: { icon: string; text?: string }) => (
     {text}
   </Space>
 )
+const StyledButton = styled(Button)`
+  margin-left: 10vw;
+`
+const StyledSpinner = styled(Spin)`
+  height: "100%";
+  width: "100%";
+`
 export const ProductItem = observer((props: ProductItemProps) => {
   const { item } = props
   return (
@@ -31,11 +42,21 @@ export const ProductItem = observer((props: ProductItemProps) => {
       <List.Item.Meta
         title={
           <Link to={`/product/${item.id}`}>
-            {item.name} #{item.id}
+            {item.name} #{item.id}{" "}
+            {item.restock ? <Text type="danger">Necesita restock</Text> : null}
           </Link>
         }
       />
-      {item.provider}
+      {item.provider}{" "}
+      {item.restock ? (
+        <StyledButton onClick={async () => await item.doRestock()} danger>
+          {item.status === "pending" ? (
+            <StyledSpinner />
+          ) : (
+            <Text type="danger">Hacer reestock</Text>
+          )}
+        </StyledButton>
+      ) : null}
     </List.Item>
   )
 })
