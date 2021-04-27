@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-extra-semi */
 /* eslint-disable react/display-name */
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../models/root-store/root-store-context"
-import { Table } from "antd"
+import { Table, Skeleton } from "antd"
 import { PedidoListItem } from "../../components/pedido-list-item/pedido-list-item"
 import styled from "styled-components"
 import { Typography } from "antd"
@@ -18,20 +18,31 @@ const StyledParagraph = styled(Paragraph)`
 
 const ProductsList = observer((props: { row: OrdersModel }) => {
   const { row } = props
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
-    ;(async () => await row.getRestockRequired())()
+    ;(async () => {
+      setLoading(true)
+      try {
+        await row.getRestockRequired()
+        setLoading(false)
+      } catch (err) {
+        setLoading(false)
+      }
+    })()
   }, [])
 
   return (
     <>
-      {row.product.map((i, idx) => (
-        <StyledParagraph key={i.id}>
-          Nombre: {i.name} | Cantidad: {row.ammount[idx]}
-          {row.orderStatus === "Pendiente" && row.requiresRestock.indexOf(i.id) > -1 ? (
-            <Text type="danger"> Necesita restock</Text>
-          ) : null}
-        </StyledParagraph>
-      ))}
+      <Skeleton loading={loading} active paragraph={{ rows: row.product.length }}>
+        {row.product.map((i, idx) => (
+          <StyledParagraph key={i.id}>
+            Nombre: {i.name} | Cantidad: {row.ammount[idx]}
+            {row.orderStatus === "Pendiente" && row.requiresRestock.indexOf(i.id) > -1 ? (
+              <Text type="danger"> Necesita restock</Text>
+            ) : null}
+          </StyledParagraph>
+        ))}
+      </Skeleton>
     </>
   )
 })
