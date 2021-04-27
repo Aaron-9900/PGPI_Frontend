@@ -30,7 +30,7 @@ export const ProductItem = observer((props: ProductItemProps) => {
     <List.Item
       key={item.id}
       actions={[
-        <IconText icon="Total: " text={item.quantity?.toString()} key="list-vertical-star-o" />,
+        <IconText icon="Disponible: " text={item.quantity?.toString()} key="list-vertical-star-o" />,
         <IconText icon="Stock: " text={item.stock?.toString()} key="list-vertical-like-o" />,
         <IconText
           icon="Preparación: "

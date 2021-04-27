@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-extra-semi */
 /* eslint-disable react/display-name */
 import { Button, List, Modal, Space, Spin, Table } from "antd"
 import { observer } from "mobx-react-lite"
@@ -68,6 +69,9 @@ const Pdf = observer((props: { row: OrdersModel }) => {
 
 const ActionButton = observer((props: { row: OrdersModel }) => {
   const { row } = props
+  useEffect(() => {
+    ;(async () => await row.getRestockRequired())()
+  }, [])
   if (row.orderStatus === "Pendiente") {
     return (
       <Button danger onClick={async () => await row.setOrderStatus(row.orderStatus)}>

@@ -14,6 +14,7 @@ export type GetUsersResult =
       }
     }
   | GeneralApiProblem
+export type GetRestockRequiredByOrder = { kind: "ok", restockIds: number[]} | GeneralApiProblem
 export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem
 export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiProblem
 export type GetProductInstances = { kind: "ok"; instances: ProductInstance[] } | GeneralApiProblem

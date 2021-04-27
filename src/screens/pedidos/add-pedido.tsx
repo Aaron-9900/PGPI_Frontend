@@ -57,11 +57,11 @@ export const AddPedido = observer(function (): JSX.Element {
           }
           setPosting(false)
           const response: number[] | null = await ordersStore.postOrder(params)
-          if(response) {
+          /*if(response) {
             response.forEach(productId => {
               productsStore.products.get(productId.toString())?.setRestock(true)
             })
-          }
+          }*/
           setPosting(true)
           form.resetFields()
           setSelectedProducts([])

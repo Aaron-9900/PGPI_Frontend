@@ -21,6 +21,7 @@ import {
   GetOrders,
   GetProductInstances,
   GetProducts,
+  GetRestockRequiredByOrder,
   PostOrder,
   PostOrderStatus,
   PostProduct,
@@ -147,6 +148,20 @@ export class Api {
     console.log(response)
     try {
       return { kind: "ok", instances: parseOrderInstances(response.data as BackendOrderInstances) }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async getRestockRequiredByOrder(id: number): Promise<GetRestockRequiredByOrder> {
+    const response: ApiResponse<any> = await this.client.get("/pedido/order_index_restock_prods", {
+      id: id,
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    try {
+      return { kind: "ok", restockIds: response.data }
     } catch {
       return { kind: "bad-data" }
     }

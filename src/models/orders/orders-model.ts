@@ -1,5 +1,9 @@
 import { applySnapshot, cast, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { GetProductInstances, PostOrderStatus } from "../../services/api-types"
+import {
+  GetProductInstances,
+  GetRestockRequiredByOrder,
+  PostOrderStatus,
+} from "../../services/api-types"
 import { withEnvironment } from "../extensions/with-environment"
 import { withStatus } from "../extensions/with-status"
 import { ProductInstance } from "../products-model/product-instance"
@@ -22,6 +26,7 @@ export const OrdersModel = types
     createdDate: types.Date,
     deliveryDate: types.maybeNull(types.Date),
     instances: types.array(ProductInstance),
+    requiresRestock: types.optional(types.array(types.number), []),
   })
   .extend(withEnvironment)
   .extend(withStatus)
@@ -43,6 +48,20 @@ export const OrdersModel = types
           self.setStatus("error")
         }
       }),
+      getRestockRequired: flow(function* () {
+        try {
+          const response: GetRestockRequiredByOrder = yield self.environment.api.getRestockRequiredByOrder(
+            self.id,
+          )
+          if (response.kind !== "ok") {
+            throw response
+          }
+          self.requiresRestock = cast(response.restockIds)
+        } catch (err) {
+          console.log(err)
+          self.setStatus("error")
+        }
+      }),
       setOrderStatus: flow(function* (orderStatus: string) {
         self.setStatus("pending")
         try {
@@ -57,14 +76,16 @@ export const OrdersModel = types
               break
             case "Pendiente":
               response = yield self.environment.api.doRestock(
-                self.product.filter(product => product.restock).map((product) => product.id),
+                self.product
+                  .filter((product) => self.requiresRestock.indexOf(product.id) > -1)
+                  .map((product) => product.id),
                 self.id,
               )
               if (response.kind !== "ok" || !response.status) {
                 throw response
               }
               self.orderStatus = "Preparación"
-              self.product.forEach(product => product.setRestock(false))
+              self.product.forEach((product) => product.setRestock(false))
               break
             case "Preparación":
               response = yield self.environment.api.setToOnItsWay(self.id)

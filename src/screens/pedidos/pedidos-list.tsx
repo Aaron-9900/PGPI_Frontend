@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-extra-semi */
 /* eslint-disable react/display-name */
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../models/root-store/root-store-context"
 import { Table } from "antd"
@@ -19,9 +20,9 @@ const ProductsList = observer((props: { row: OrdersModel }) => {
     <>
       {row.product.map((i, idx) => (
         <StyledParagraph key={i.id}>
-          Nombre: {i.name} | Cantidad: {row.ammount[idx]} {console.log(row.orderStatus, i.restock)}
-          {row.orderStatus === "Pendiente" && i.restock ? (
-            <Text type="danger">Necesita restock</Text>
+          Nombre: {i.name} | Cantidad: {row.ammount[idx]}
+          {row.orderStatus === "Pendiente" && row.requiresRestock.find((item) => item === i.id) ? (
+            <Text type="danger"> Necesita restock</Text>
           ) : null}
         </StyledParagraph>
       ))}
