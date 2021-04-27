@@ -161,7 +161,7 @@ export const AddPedido = observer(function (): JSX.Element {
       </Form.Item>
       {ordersStore.status === "error" && <Text type="danger">{err}</Text>}
       {ordersStore.status === "done" && posting && (
-        <Text type="success">Producto agregado con exito</Text>
+        <Text type="success">Pedido agregado con exito</Text>
       )}
     </Form>
   )
