@@ -105,7 +105,7 @@ const AlbaranItems = (props: AlbaranDateProps) => {
   }
 }
 
-const Albaran = (props: AlbaranProps): JSX.Element => {
+export const Etiqueta = (props: AlbaranProps): JSX.Element => {
   const { order } = props
   return (
     <Document>
@@ -115,10 +115,21 @@ const Albaran = (props: AlbaranProps): JSX.Element => {
           <AlbaranDate order={order} />
         </Section>
         <Section>
-          <Table order={order} />
+          <Text style={styles.regularText}>Tipo de envío: {order.type}</Text>
+        </Section>
+        <Section>
+          <Text style={styles.regularText}>ID: {order.id.toString()}</Text>
+        </Section>
+        <Section>
+          <Text style={styles.regularText}>Nombre: {order.name}</Text>
+        </Section>
+        <Section>
+          <Text style={styles.regularText}>Dirección: {order.address}</Text>
+        </Section>
+        <Section>
+          <AlbaranWeights order={order} />
         </Section>
       </Page>
     </Document>
   )
 }
-export default memo(Albaran)

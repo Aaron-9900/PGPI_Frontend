@@ -11,6 +11,7 @@ import styled from "styled-components"
 import { PDFDownloadLink, Document, Page } from "@react-pdf/renderer"
 import Albaran from "../pdf/albaran"
 import { useStores } from "../../models/root-store/root-store-context"
+import { Etiqueta } from "../pdf/etiqueta"
 
 const { Text, Paragraph } = Typography
 interface PedidoListProps {
@@ -48,18 +49,18 @@ const ModalDisplay = observer((props: { item: OrdersModel }) => {
   )
 })
 
-const Pdf = observer((props: { row: OrdersModel }) => {
+const Pdf = observer((props: { row: OrdersModel; type: "albaran" | "etiqueta" }) => {
   const { ordersStore } = useStores()
-  const { row } = props
+  const { row, type } = props
   return (
     <>
       {row.orderStatus === "Recibido" && ordersStore.status === "done" && (
         <div>
           <PDFDownloadLink
-            document={<Albaran order={row} />}
-            fileName={`albaran_pedido_${row.id}.pdf`}
+            document={type === "albaran" ? <Albaran order={row} /> : <Etiqueta order={row} />}
+            fileName={`${type}_pedido_${row.id}.pdf`}
           >
-            <Button type="primary">Descargar albarán</Button>
+            <Button type="primary">Descargar {type}</Button>
           </PDFDownloadLink>
         </div>
       )}
@@ -69,9 +70,6 @@ const Pdf = observer((props: { row: OrdersModel }) => {
 
 const ActionButton = observer((props: { row: OrdersModel }) => {
   const { row } = props
-  useEffect(() => {
-    ;(async () => await row.getRestockRequired())()
-  }, [])
   if (row.orderStatus === "Pendiente") {
     return (
       <Button danger onClick={async () => await row.setOrderStatus(row.orderStatus)}>
@@ -137,11 +135,11 @@ export const PedidoListItem = [
   {
     title: "Descargar albarán",
     key: "albaran",
-    render: (row: OrdersModel) => <Pdf row={row} />,
+    render: (row: OrdersModel) => <Pdf type="albaran" row={row} />,
   },
   {
     title: "Descargar ficha de envio",
     key: "envio",
-    render: (row: OrdersModel) => <Pdf row={row} />,
+    render: (row: OrdersModel) => <Pdf type="etiqueta" row={row} />,
   },
 ]

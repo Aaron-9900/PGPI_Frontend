@@ -26,7 +26,7 @@ export const OrdersModel = types
     createdDate: types.Date,
     deliveryDate: types.maybeNull(types.Date),
     instances: types.array(ProductInstance),
-    requiresRestock: types.optional(types.array(types.number), []),
+    requiresRestock: types.array(types.number),
   })
   .extend(withEnvironment)
   .extend(withStatus)
@@ -56,7 +56,7 @@ export const OrdersModel = types
           if (response.kind !== "ok") {
             throw response
           }
-          self.requiresRestock = cast(response.restockIds)
+          applySnapshot(self.requiresRestock, response.restockIds)
         } catch (err) {
           console.log(err)
           self.setStatus("error")

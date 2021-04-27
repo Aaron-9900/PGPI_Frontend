@@ -8,6 +8,8 @@ import { PedidoListItem } from "../../components/pedido-list-item/pedido-list-it
 import styled from "styled-components"
 import { Typography } from "antd"
 import { OrdersModel } from "../../models/orders/orders-model"
+import { toJS } from "mobx"
+
 const { Paragraph, Text } = Typography
 const StyledParagraph = styled(Paragraph)`
   margin-top: 0.5em;
@@ -16,12 +18,16 @@ const StyledParagraph = styled(Paragraph)`
 
 const ProductsList = observer((props: { row: OrdersModel }) => {
   const { row } = props
+  useEffect(() => {
+    ;(async () => await row.getRestockRequired())()
+  }, [])
+
   return (
     <>
       {row.product.map((i, idx) => (
         <StyledParagraph key={i.id}>
           Nombre: {i.name} | Cantidad: {row.ammount[idx]}
-          {row.orderStatus === "Pendiente" && row.requiresRestock.find((item) => item === i.id) ? (
+          {row.orderStatus === "Pendiente" && row.requiresRestock.indexOf(i.id) > -1 ? (
             <Text type="danger"> Necesita restock</Text>
           ) : null}
         </StyledParagraph>
