@@ -52,6 +52,22 @@ export const ProductsModel = types
           self.setStatus("error")
         }
       }),
+      changeProvider: flow(function* (provider: string) {
+        self.setStatus("pending")
+        try {
+          const response: GetProductInstances = yield self.environment.api.changeProvider(
+            self.id,
+            provider,
+          )
+          if (response.kind !== "ok") {
+            throw response
+          }
+          self.provider = provider
+          self.setStatus("done")
+        } catch (err) {
+          self.setStatus("error")
+        }
+      }),
     }
   })
 

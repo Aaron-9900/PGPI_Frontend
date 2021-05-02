@@ -24,6 +24,7 @@ export const Home = observer(function (): JSX.Element {
   const history = useHistory()
   useEffect(() => {
     productsStore.getProducts()
+    productsStore.getProviders()
   }, [productsStore])
   return (
     <Layout>

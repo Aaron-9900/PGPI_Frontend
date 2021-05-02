@@ -15,12 +15,15 @@ import {
   parseOrders,
   parseProduct,
   parseProducts,
+  parseProviders,
 } from "./api-helpers"
 import { getGeneralApiProblem } from "./api-problem"
 import {
+  EmptyResponse,
   GetOrders,
   GetProductInstances,
   GetProducts,
+  GetProviders,
   GetRestockRequiredByOrder,
   PostOrder,
   PostOrderStatus,
@@ -88,6 +91,39 @@ export class Api {
     }
     try {
       return { kind: "ok", instances: parseInstances(response.data as BackendProductInstance[]) }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async getProviders(): Promise<GetProviders> {
+    const response: ApiResponse<{ id: number; nombre: string }[]> = await this.client.get(
+      "/proveedor/index",
+    )
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    try {
+      return {
+        kind: "ok",
+        providers: parseProviders(response.data as { id: number; nombre: string }[]),
+      }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+  async changeProvider(productId: number, providerName: string): Promise<EmptyResponse> {
+    const response: ApiResponse<any> = await this.client.post("/producto/modifyProveedor", null, {
+      params: { id: productId, nombre: providerName },
+    })
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) throw problem
+    }
+    try {
+      return {
+        kind: "ok",
+      }
     } catch {
       return { kind: "bad-data" }
     }

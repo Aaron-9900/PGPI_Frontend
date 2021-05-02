@@ -45,7 +45,10 @@ export type BackendPosition = {
   id_posicion: number
   disponible: number
 }
-export type BackendPostOrderResponse = [[[[BackendProductInstance, BackendPosition]]] | number[], BackendOrder]
+export type BackendPostOrderResponse = [
+  [[[BackendProductInstance, BackendPosition]]] | number[],
+  BackendOrder,
+]
 
 function parseState(
   status: BackendOrderStatus,
@@ -131,4 +134,9 @@ export function parseOrderInstances(
 }
 export function parseOrders(backendOrders: BackendOrder[]): OrdersModel[] {
   return backendOrders.map((order) => parseOrder(order))
+}
+export function parseProviders(
+  backendProviders: { id: number; nombre: string }[],
+): { id: number; name: string }[] {
+  return backendProviders.map((provider) => ({ id: provider.id, name: provider.nombre }))
 }

@@ -14,10 +14,16 @@ export type GetUsersResult =
       }
     }
   | GeneralApiProblem
-export type GetRestockRequiredByOrder = { kind: "ok", restockIds: number[]} | GeneralApiProblem
+export type EmptyResponse = { kind: "ok" } | GeneralApiProblem
+export type GetRestockRequiredByOrder = { kind: "ok"; restockIds: number[] } | GeneralApiProblem
 export type PostProduct = { kind: "ok"; product: ProductsModel } | GeneralApiProblem
 export type GetProducts = { kind: "ok"; product: ProductsModel[] } | GeneralApiProblem
 export type GetProductInstances = { kind: "ok"; instances: ProductInstance[] } | GeneralApiProblem
-export type PostOrder = { kind: "ok"; order: OrdersModel, restockId: number[] | any } | GeneralApiProblem
+export type GetProviders =
+  | { kind: "ok"; providers: { id: number; name: string }[] }
+  | GeneralApiProblem
+export type PostOrder =
+  | { kind: "ok"; order: OrdersModel; restockId: number[] | any }
+  | GeneralApiProblem
 export type GetOrders = { kind: "ok"; orders: OrdersModel[] } | GeneralApiProblem
 export type PostOrderStatus = { kind: "ok"; status: boolean } | GeneralApiProblem

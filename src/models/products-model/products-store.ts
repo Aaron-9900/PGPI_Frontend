@@ -1,8 +1,9 @@
-import { applySnapshot, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
-import { GetProducts, PostProduct } from "../../services/api-types"
+import { applySnapshot, cast, flow, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { GetProducts, GetProviders, PostProduct } from "../../services/api-types"
 import { withEnvironment } from "../extensions/with-environment"
 import { withStatus } from "../extensions/with-status"
 import { ProductsModel } from "./products-model"
+import { ProvidersModel } from "./providers-model"
 
 export type ProductParams = {
   name: string
@@ -14,6 +15,7 @@ export const ProductsModelStore = types
   .model("ProductsModelStore")
   .props({
     products: types.map(ProductsModel),
+    providers: types.array(ProvidersModel),
   })
   .extend(withEnvironment)
   .extend(withStatus)
@@ -52,6 +54,20 @@ export const ProductsModelStore = types
             throw response
           }
           self.products.put(response.product)
+        } catch (err) {
+          self.setStatus("error")
+          throw err
+        }
+      }),
+      getProviders: flow(function* () {
+        self.setStatus("pending")
+        try {
+          const response: GetProviders = yield self.environment.api.getProviders()
+          self.setStatus("idle")
+          if (response.kind !== "ok") {
+            throw response
+          }
+          self.providers = cast(response.providers)
         } catch (err) {
           self.setStatus("error")
           throw err
