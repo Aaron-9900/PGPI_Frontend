@@ -53,7 +53,6 @@ export const ProductsModel = types
         }
       }),
       changeProvider: flow(function* (provider: string) {
-        self.setStatus("pending")
         try {
           const response: GetProductInstances = yield self.environment.api.changeProvider(
             self.id,

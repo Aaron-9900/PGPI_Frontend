@@ -26,17 +26,21 @@ const StyledSpinner = styled(Spin)`
   width: "100%";
 `
 const StyledProviders = styled.div`
-  cursor: select;
+  cursor: pointer;
 `
 const StyledInput = styled(Input)`
   width: 10% !important;
   margin-top: 10px;
+`
+const StyledText = styled(Text)`
+  display: flex;
 `
 export const ProductItem = observer((props: ProductItemProps) => {
   const { item } = props
   const { productsStore } = useStores()
   const [selectProviders, setSelectProviders] = useState(false)
   const [newProvider, setNewProvider] = useState(false)
+  const [statusLoading, setStatusLoading] = useState(false)
   return (
     <List.Item
       key={item.id}
@@ -69,15 +73,20 @@ export const ProductItem = observer((props: ProductItemProps) => {
         <Select
           defaultValue={item.provider}
           className="select-after"
-          onChange={(val: string) => {
+          onChange={async (val: string) => {
             if (val === "new") {
               setNewProvider(true)
               return
             }
-            item.changeProvider(val)
+            setStatusLoading(true)
+            try {
+              await item.changeProvider(val)
+            } catch (err) {}
+            setStatusLoading(false)
             setSelectProviders(false)
             setNewProvider(false)
           }}
+          loading={statusLoading}
         >
           {productsStore.providers.map((provider) => (
             <Option key={provider.id} value={provider.name}>
@@ -91,8 +100,11 @@ export const ProductItem = observer((props: ProductItemProps) => {
         <>
           <Form
             onFinish={async (value: any) => {
-              console.log(value)
-              await item.changeProvider(value["provider"])
+              setStatusLoading(true)
+              try {
+                await item.changeProvider(value["provider"])
+              } catch (err) {}
+              setStatusLoading(false)
               setSelectProviders(false)
               setNewProvider(false)
             }}
@@ -104,7 +116,9 @@ export const ProductItem = observer((props: ProductItemProps) => {
                 }}
               ></StyledInput>
             </Form.Item>
-            <Button htmlType="submit">Aceptar</Button>
+            <Button htmlType="submit" loading={statusLoading}>
+              Aceptar
+            </Button>
           </Form>
         </>
       )}
@@ -117,6 +131,7 @@ export const ProductItem = observer((props: ProductItemProps) => {
           )}
         </StyledButton>
       ) : null}
+      {item.status === "error" && <StyledText type="danger">{"Process error"}</StyledText>}
     </List.Item>
   )
 })
