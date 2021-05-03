@@ -4,6 +4,6 @@ export interface ApiConfig {
 }
 
 export const API_CONFIG: ApiConfig = {
-  baseUrl: "http://localhost:8888/PGPI/api/backend/",
+  baseUrl: "http://pgpi-backend.herokuapp.com/PGPI/api/backend/",
   timeout: 20000,
 }
