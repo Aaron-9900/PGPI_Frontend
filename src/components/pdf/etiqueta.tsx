@@ -15,7 +15,7 @@ interface AlbaranDateProps {
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    backgroundColor: "#E4E4E4",
+    backgroundColor: "#FFFFFF",
     flexWrap: "wrap",
   },
   section: {

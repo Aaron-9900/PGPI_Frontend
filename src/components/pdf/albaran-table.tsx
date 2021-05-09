@@ -24,16 +24,16 @@ const styles = StyleSheet.create({
     borderColor: "#bfbfbf",
     borderBottomColor: "#000",
     borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
   },
   tableCol: {
     width: "25%",
     borderStyle: "solid",
     borderColor: "#bfbfbf",
     borderWidth: 1,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
   },
   tableCellHeader: {
     margin: "auto",
@@ -58,6 +58,9 @@ const Table = (props: TableProps): JSX.Element => {
     <View style={styles.table}>
       <View style={styles.tableRow}>
         <View style={styles.tableColHeader}>
+          <Text style={styles.tableCellHeader}>ID</Text>
+        </View>
+        <View style={styles.tableColHeader}>
           <Text style={styles.tableCellHeader}>Producto</Text>
         </View>
         <View style={styles.tableColHeader}>
@@ -67,6 +70,9 @@ const Table = (props: TableProps): JSX.Element => {
       {order.product.map((product, idx) => {
         return (
           <View key={product.id} style={styles.tableRow}>
+            <View style={styles.tableCol}>
+              <Text style={styles.tableCell}>{product.id.toString()}</Text>
+            </View>
             <View style={styles.tableCol}>
               <Text style={styles.tableCell}>{product.name}</Text>
             </View>

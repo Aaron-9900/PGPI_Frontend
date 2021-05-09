@@ -50,6 +50,11 @@ export const ProductItem = observer((props: ProductItemProps) => {
           text={item.quantity?.toString()}
           key="list-vertical-star-o"
         />,
+        <IconText
+        icon="Cantidad minima de reestock: "
+        text={item.minRestock?.toString()}
+        key="vertical-star-o"
+      />,
         <IconText icon="Stock: " text={item.stock?.toString()} key="list-vertical-like-o" />,
         <IconText
           icon="Preparación: "

@@ -29,7 +29,7 @@ const StyledParagraph = styled(Paragraph)`
 const parseOrderStatus = (status: string): string => {
   switch (status) {
     case "En camino":
-      return "Poner produto como entregado."
+      return "Poner producto como entregado."
     case "Preparación":
       return "Recoger instancias y enviar producto."
   }
@@ -52,9 +52,12 @@ const ModalDisplay = observer((props: { item: OrdersModel }) => {
 const Pdf = observer((props: { row: OrdersModel; type: "albaran" | "etiqueta" }) => {
   const { ordersStore } = useStores()
   const { row, type } = props
+  if(row.orderStatus === "Preparación" ||  row.orderStatus === "Pendiente") {
+    return <></>
+  }
   return (
     <>
-      {row.orderStatus === "Recibido" && ordersStore.status === "done" && (
+      {ordersStore.status === "done" && (
         <div>
           <PDFDownloadLink
             document={type === "albaran" ? <Albaran order={row} /> : <Etiqueta order={row} />}
